@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Head from 'next/head';
 
 export default function Home() {
   const [modalImage, setModalImage] = useState(null);
@@ -25,9 +25,11 @@ export default function Home() {
   const nextImage = () => setCarouselIndex((prev) => (prev + 1) % images.length);
 
   return (
-    <div>
-      <Navbar />
-      <div className="min-h-screen bg-gray-100 py-8">
+    <div className="flex flex-col min-h-screen">
+      <Head>
+        <title>Home - Witold's Data Consulting</title>
+      </Head>
+      <div className="flex-grow min-h-screen bg-gray-100 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <h1 className="text-4xl font-bold mb-6 text-center">Welcome to My Portfolio</h1>
           <p className="text-lg mb-8 text-center">Showcasing my skills, projects, and more!</p>

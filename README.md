@@ -19,18 +19,23 @@ Pages
 
 Home: Hero section, modal images, and image carousel.
 About: Bio and skills.
-Projects: Detailed project showcase with images, tech stack, and links.
-Gallery: Filterable gallery with 50+ image cards (single images, carousels, videos, GIFs) in a responsive masonry grid with natural media heights and user-selectable column count (1, 2, or 3), using data from public/data/gallery.json.
+Projects: Blog-style page listing posts with filters (All, Major), linking to individual post pages, using data from public/data/projects.json.
+Gallery: Filterable gallery with 50+ image cards (single images, carousels, videos, GIFs) in a responsive grid, using data from public/data/gallery.json.
 Contact: Form that logs submissions to the console.
+Sitemap: Dedicated page listing all site pages.
 
 Features
 
-Responsive navigation bar with Gallery link.
-Tailwind CSS styling with lazy-loaded media.
+Responsive navigation bar with Gallery link, light/dark mode toggle (fixed-size button), mobile menu for small screens, and branded logo ("Witold's Data" in monospace).
+Footer with left-aligned Sitemap link and legal note, uniform font size, and no margin between Sitemap and legal note.
+Consistent page titles in format " - Witold's Data Consulting".
+Blog-style Projects section with dynamic post pages (/projects/[slug]) supporting rich content blocks (text, carousels, code, SVGs, grids) with modal images for blog migration.
+Tailwind CSS styling with lazy-loaded media and dark mode support (including filter buttons).
 Client-side routing with Next.js.
 Static site export for GitHub Pages.
-Modal images and carousel on Home page using external URLs.
-Scalable gallery with multi-category filtering, masonry layout, user-selectable columns, 80% screen modal, and background-click-to-close.
+Modal images and carousel on Home page and blog posts using external URLs.
+Scalable gallery with multi-category filtering, larger cards, modal close button in viewport corner, and close on background click.
+Navbar and Footer rendered globally via pages/_app.js for consistency.
 
 Git Setup
 
@@ -62,7 +67,7 @@ Troubleshooting
 403 Permission Error: Grant “Read and write” permissions in Settings > Actions > General.
 Links Not Updating: Ensure basePath matches repo name. Check out for index.html files.
 CSS Missing: Verify tailwind.config.js, postcss.config.js, and out/_next/static/css/.
-Images Not Loading: Confirm external media URLs in public/data/gallery.json are accessible.
-Masonry Issues: Ensure react-masonry-css is installed and breakpointCols reflects selected columns. Check DevTools for JS errors.
-Column Selector: Verify buttons toggle columns (1, 2, 3) correctly.
-
+Images Not Loading: Confirm external media URLs in public/data/projects.json or public/data/gallery.json are accessible.
+Theme Issues: Check DevTools Console for theme toggle logs. Ensure dark class toggles on <html>.
+Footer Issues: Ensure only one footer appears; verify pages/_app.js includes <Footer /> and pages do not.
+Build Errors: Check pages/projects/[slug].js for correct file paths in getStaticPaths and getStaticProps. Ensure components/ContentBlock.js imports Link from next/link for grid blocks and handles modal images correctly.

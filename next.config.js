@@ -1,6 +1,6 @@
 module.exports = {
   output: 'export',
-  basePath: '/my-portfolio-test', // Replace with your GitHub repo name
+  basePath: '/my-portfolio-test',
   assetPrefix: '/my-portfolio-test/',
   trailingSlash: true,
   images: {

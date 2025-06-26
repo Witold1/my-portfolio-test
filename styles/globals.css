@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  @apply bg-gray-100 text-gray-900;
+}
+html.dark {
+  @apply bg-gray-900 text-gray-100;
+}
+
+body, .min-h-screen {
+  @apply bg-gray-100 dark:bg-gray-900;
+}
+
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+}
+.carousel-container img, .carousel-container video {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}

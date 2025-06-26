@@ -1,15 +1,15 @@
 [
     {
       "id": "1",
-      "type": "single-image",
-      "media": [{ "type": "image", "src": "https://picsum.photos/800/400?random=1", "alt": "General Visualization" }],
+      "type": "image",
+      "src": "https://picsum.photos/800/400?random=1",
       "categories": ["general-topic", "population-charts"],
       "title": "Population Overview"
     },
     {
       "id": "2",
-      "type": "image-carousel",
-      "media": [
+      "type": "carousel",
+      "items": [
         { "type": "image", "src": "https://witold1.github.io/gallery/assets/content/USA%20Parks%20and%20Parkings.gif", "alt": "Road Network 1" },
         { "type": "image", "src": "https://picsum.photos/800/400?random=3", "alt": "Road Network 2" }
       ],
@@ -19,21 +19,21 @@
     {
       "id": "3",
       "type": "video",
-      "media": [{ "type": "video", "src": "https://sample-videos.com//video321/mp4/240/big_buck_bunny_240p_20mb.mp4", "alt": "3D LiDAR Demo" }],
+      "src": "https://sample-videos.com//video321/mp4/240/big_buck_bunny_240p_20mb.mp4",
       "categories": ["3d-lidar", "geography-terrain"],
       "title": "LiDAR Visualization"
     },
     {
       "id": "4",
-      "type": "gif",
-      "media": [{ "type": "image", "src": "https://media.giphy.com/media/l0Iyl55kTehGHrXIA/giphy.gif", "alt": "Terrain Animation" }],
+      "type": "image",
+      "src": "https://media.giphy.com/media/l0Iyl55kTehGHrXIA/giphy.gif",
       "categories": ["geography-terrain"],
       "title": "Terrain Motion"
     },
     {
       "id": "5",
-      "type": "mixed-carousel",
-      "media": [
+      "type": "carousel",
+      "items": [
         { "type": "image", "src": "https://picsum.photos/800/400?random=4", "alt": "Population Chart" },
         { "type": "video", "src": "https://sample-videos.com//video321/mp4/240/big_buck_bunny_240p_20mb.mp4", "alt": "Population Video" },
         { "type": "image", "src": "https://picsum.photos/800/400?random=4", "alt": "Population Chart" }
@@ -43,8 +43,8 @@
     },
     {
         "id": "6",
-        "type": "image-carousel",
-        "media": [
+        "type": "carousel",
+        "items": [
           { "type": "image", "src": "https://witold1.github.io/gallery/assets/content/Population-Charts/Population-Western-Asia-hot.jpeg", "alt": "Road Network 1132" },
           { "type": "image", "src": "https://witold1.github.io/gallery/assets/content/Population-Charts/Population-Western-Asia-ice.jpeg", "alt": "Road Network 2123" },
           { "type": "image", "src": "https://witold1.github.io/gallery/assets/content/Population-Charts/Population-Western-Asia-plasma.jpeg", "alt": "Road Network 2123" },
@@ -55,8 +55,8 @@
       },
       {
         "id": "7",
-        "type": "image-carousel",
-        "media": [
+        "type": "carousel",
+        "items": [
           { "type": "image", "src": "https://sample-videos.com//gif/3.gif", "alt": "Road 1" },
           { "type": "image", "src": "https://picsum.photos/500/500?random=3", "alt": "Road Title 2" }
         ],
@@ -66,30 +66,35 @@
       {
         "id": "8",
         "type": "image",
-        "media": [
-          { "type": "image", "src": "https://witold1.github.io/blog/posts/small-project-blood-tool/figures/project-bloody-toll.jpeg", "alt": "Road Network 12" }
-        ],
+        "src": "https://witold1.github.io/blog/posts/small-project-blood-tool/figures/project-bloody-toll.jpeg",
         "categories": ["road-networks"],
         "title": "Road Network Analysis"
       },
       {
         "id": "9",
         "type": "image",
-        "media": [
-          { "type": "image", "src": "https://witold1.github.io/blog/posts/small-project-blood-tool/figures/project-bloody-toll.jpeg", "alt": "Road Network 13" }
-        ],
+        "src": "https://witold1.github.io/blog/posts/small-project-blood-tool/figures/project-bloody-toll.jpeg",
         "categories": ["3d-lidar", "road-networks", "population-charts"],
         "title": "Road Network Analysis 123"
       },
       {
         "id": "10",
-        "type": "image-carousel",
-        "media": [
+        "type": "carousel",
+        "items": [
           { "type": "image", "src": "https://picsum.photos/800/2000?random=2", "alt": "Road Network 144" },
           { "type": "image", "src": "https://picsum.photos/800/2000?random=4", "alt": "Road Network 222" },
           { "type": "image", "src": "https://picsum.photos/800/2000?random=5", "alt": "Road Network 211" }
         ],
         "categories": ["road-networks"],
         "title": "Road Network Analysis 456"
+      },
+      {
+        "id": 11,
+        "title": "Data Video",
+        "description": "A video showcasing data animations.",
+        "src": "https://sample-videos.com//video321/mp4/240/big_buck_bunny_240p_20mb.mp4",
+        "type": "video",
+        "categories": ["general-topic"],
+        "alt": "Data Video"
       }
   ]

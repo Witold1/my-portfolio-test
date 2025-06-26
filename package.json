@@ -1,20 +1,26 @@
 {
   "name": "my-next-app",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "next export",
     "start": "next start",
-    "export": "next build"
+    "lint": "next lint"
   },
   "dependencies": {
-    "next": "14.2.3",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "autoprefixer": "^10.4.20",
+    "next": "^15.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-responsive-masonry": "^2.2.0",
+    "tailwindcss": "^3.4.1",
+    "gray-matter": "^4.0.3",
+    "marked": "^14.1.2",
+    "prop-types": "^15.8.1"
+  },
+  "devDependencies": {
     "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
-    "react-masonry-css": "^1.0.16"
+    "autoprefixer": "^10.4.20"
   }
 }

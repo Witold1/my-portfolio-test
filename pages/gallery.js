@@ -1,118 +1,204 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import Card from '../components/Card';
-import Masonry from 'react-masonry-css';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import Image from 'next/image';
+import styles from './Gallery.module.css';
 
-export default function Gallery() {
-  const [modalMedia, setModalMedia] = useState(null);
+// Sample image data with low and high-quality placeholder URLs from Lorem Picsum
+const galleryItems = [
+  {
+    id: 1,
+    thumbnail: 'https://picsum.photos/id/1018/300/200?blur=2',
+    full: 'https://picsum.photos/id/1018/1200/800',
+    width: 1200,
+    height: 800,
+    category: 'nature',
+    alt: 'Nature landscape',
+  },
+  {
+    id: 2,
+    thumbnail: 'https://picsum.photos/id/1025/300/400?blur=2',
+    full: 'https://picsum.photos/id/1025/1200/1600',
+    width: 1200,
+    height: 1600,
+    category: 'urban',
+    alt: 'City skyline',
+  },
+  {
+    id: 3,
+    thumbnail: 'https://picsum.photos/id/1015/300/250?blur=2',
+    full: 'https://picsum.photos/id/1015/1200/1000',
+    width: 1200,
+    height: 1000,
+    category: 'nature',
+    alt: 'Forest path',
+  },
+  {
+    id: 4,
+    thumbnail: 'https://picsum.photos/id/1020/300/300?blur=2',
+    full: 'https://picsum.photos/id/1020/1200/1200',
+    width: 1200,
+    height: 1200,
+    category: 'urban',
+    alt: 'Urban street',
+  },
+];
+
+const Gallery = () => {
   const [filter, setFilter] = useState('all');
-  const [cards, setCards] = useState([]);
+  const [layout, setLayout] = useState('masonry');
+  const [modalImage, setModalImage] = useState(null);
+  const [isClient, setIsClient] = useState(false);
 
+  // Ensure client-side rendering
   useEffect(() => {
-    fetch('/data/gallery.json')
-      .then((res) => {
-        if (!res.ok) throw new Error('Network response was not ok');
-        return res.json();
-      })
-      .then((data) => setCards(data))
-      .catch((err) => console.error('Failed to load gallery data:', err));
+    setIsClient(true);
   }, []);
 
-  const filteredCards = filter === 'all' 
-    ? cards 
-    : cards.filter((card) => card.categories.some((cat) => cat.toLowerCase().replace('/', '') === filter));
+  // Filter items based on category
+  const filteredItems = filter === 'all'
+    ? galleryItems
+    : galleryItems.filter(item => item.category === filter);
 
-  const openModal = (media) => setModalMedia(media);
-  const closeModal = () => setModalMedia(null);
-
-  const categories = [
-    'all',
-    'general-topic',
-    'population-charts',
-    'road-networks',
-    '3d-lidar',
-    'geography-terrain',
-  ];
-
+  // Responsive breakpoints for masonry
   const breakpointCols = {
-    default: 3,
-    960: 3,
-    576: 3,
+    350: 1,
+    750: 2,
+    1200: 3,
   };
 
+  // Open/close modal
+  const openModal = (item) => setModalImage(item);
+  const closeModal = () => setModalImage(null);
+
+  // Debug: Log filtered items, layout, and client status
+  useEffect(() => {
+    console.log('Is Client:', isClient);
+    console.log('Filtered Items:', filteredItems);
+    console.log('Current Layout:', layout);
+  }, [isClient, filteredItems, layout]);
+
+  // Render nothing until client-side
+  if (!isClient) {
+    return <p>Loading gallery...</p>;
+  }
+
   return (
-    <div>
-      <Navbar />
-      <div className="min-h-screen bg-gray-100 py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-6 text-center">Data Visualization Gallery</h1>
+    <div className={styles.container}>
+      {/* Filter and Layout Controls */}
+      <div className={styles.filters}>
+        <button
+          onClick={() => setFilter('all')}
+          className={filter === 'all' ? styles.active : ''}
+          aria-label="Show all images"
+        >
+          All
+        </button>
+        <button
+          onClick={() => setFilter('nature')}
+          className={filter === 'nature' ? styles.active : ''}
+          aria-label="Show nature images"
+        >
+          Nature
+        </button>
+        <button
+          onClick={() => setFilter('urban')}
+          className={filter === 'urban' ? styles.active : ''}
+          aria-label="Show urban images"
+        >
+          Urban
+        </button>
+        <button
+          onClick={() => setLayout('grid')}
+          className={layout === 'grid' ? styles.active : ''}
+          aria-label="Switch to grid layout"
+        >
+          Grid
+        </button>
+        <button
+          onClick={() => setLayout('masonry')}
+          className={layout === 'masonry' ? styles.active : ''}
+          aria-label="Switch to masonry layout"
+        >
+          Masonry
+        </button>
+      </div>
 
-          {/* Filter Buttons */}
-          <div className="flex flex-wrap justify-center gap-2 mb-6">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setFilter(category)}
-                className={`px-4 py-2 rounded ${filter === category ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
-              >
-                {category === 'all' ? 'Show All' : category.replace(/-/g, ' ').replace('3d-lidar', '3D/LiDAR').replace(/\b\w/g, c => c.toUpperCase())}
-              </button>
-            ))}
-          </div>
-
-          {/* Masonry Grid */}
-          <Masonry
-            breakpointCols={breakpointCols}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
-          >
-            {filteredCards.map((card) => (
-              <Card key={card.id} card={card} openModal={openModal} />
-            ))}
-          </Masonry>
-
-          {/* Modal */}
-          {modalMedia && (
-            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={closeModal}>
-              <div className="relative w-[80vw] h-[80vh]" onClick={(e) => e.stopPropagation()}>
-                {modalMedia.type === 'image' ? (
-                  <img src={modalMedia.src} alt={modalMedia.alt} className="w-full h-full object-contain rounded-lg" />
-                ) : (
-                  <video src={modalMedia.src} controls autoPlay className="w-full h-full object-contain rounded-lg" />
-                )}
+      {/* Gallery */}
+      {layout === 'grid' ? (
+        <div className={styles.grid}>
+          {filteredItems.length === 0 ? (
+            <p>No items to display</p>
+          ) : (
+            filteredItems.map(item => (
+              <div key={item.id} className={styles.gridItem}>
+                <Image
+                  src={item.thumbnail}
+                  alt={item.alt}
+                  width={300}
+                  height={300}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPp6o9mwAAAABJRU5ErkJggg=="
+                  className={styles.image}
+                  onClick={() => openModal(item)}
+                  loading="lazy"
+                  onError={() => console.error(`Failed to load image: ${item.thumbnail}`)}
+                />
               </div>
-              <button
-                onClick={closeModal}
-                className="fixed top-4 right-4 bg-gray-800 text-white p-2 rounded-full text-xl"
-              >
-                ×
-              </button>
-            </div>
+            ))
           )}
         </div>
-      </div>
+      ) : (
+        <div>
+          {filteredItems.length === 0 ? (
+            <p>No items to display</p>
+          ) : (
+            <ResponsiveMasonry columnsCountBreakPoints={breakpointCols}>
+              <Masonry gutter="10px">
+                {filteredItems.map(item => (
+                  <div key={item.id} className={styles.masonryItem}>
+                    <Image
+                      src={item.thumbnail}
+                      alt={item.alt}
+                      width={300}
+                      height={item.height}
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPp6o9mwAAAABJRU5ErkJggg=="
+                      className={styles.image}
+                      onClick={() => openModal(item)}
+                      loading="lazy"
+                      onError={() => console.error(`Failed to load image: ${item.thumbnail}`)}
+                    />
+                  </div>
+                ))}
+              </Masonry>
+            </ResponsiveMasonry>
+          )}
+        </div>
+      )}
+
+      {/* Custom Modal */}
+      {modalImage && (
+        <div className={styles.modal} onClick={closeModal}>
+          <div className={styles.modalContent}>
+            <Image
+              src={modalImage.full}
+              alt={modalImage.alt}
+              width={modalImage.width}
+              height={modalImage.height}
+              className={styles.modalImage}
+              loading="eager"
+              onError={() => console.error(`Failed to load modal image: ${modalImage.full}`)}
+            />
+            <button className={styles.closeButton} onClick={closeModal} aria-label="Close modal">
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
-// Custom CSS for Masonry (inlined for static export)
-const styles = `
-  .my-masonry-grid {
-    display: flex;
-    margin-left: -1rem; /* Adjust for gap */
-    width: auto;
-  }
-  .my-masonry-grid_column {
-    padding-left: 1rem; /* Adjust for gap */
-    background-clip: padding-box;
-  }
-  /* Add media query for responsiveness if needed */
-  @media (max-width: 576px) {
-    .my-masonry-grid {
-      margin-left: 0;
-    }
-    .my-masonry-grid_column {
-      padding-left: 0;
-    }
-  }
-`;
+export default Gallery;
