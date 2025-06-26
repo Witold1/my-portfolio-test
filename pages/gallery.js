@@ -1,204 +1,130 @@
-'use client';
-
 import { useState, useEffect } from 'react';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import Image from 'next/image';
-import styles from './Gallery.module.css';
+import Head from 'next/head';
+import { MasonryGrid } from '@egjs/react-grid';
+import Card from '../components/Card';
 
-// Sample image data with low and high-quality placeholder URLs from Lorem Picsum
-const galleryItems = [
-  {
-    id: 1,
-    thumbnail: 'https://picsum.photos/id/1018/300/200?blur=2',
-    full: 'https://picsum.photos/id/1018/1200/800',
-    width: 1200,
-    height: 800,
-    category: 'nature',
-    alt: 'Nature landscape',
-  },
-  {
-    id: 2,
-    thumbnail: 'https://picsum.photos/id/1025/300/400?blur=2',
-    full: 'https://picsum.photos/id/1025/1200/1600',
-    width: 1200,
-    height: 1600,
-    category: 'urban',
-    alt: 'City skyline',
-  },
-  {
-    id: 3,
-    thumbnail: 'https://picsum.photos/id/1015/300/250?blur=2',
-    full: 'https://picsum.photos/id/1015/1200/1000',
-    width: 1200,
-    height: 1000,
-    category: 'nature',
-    alt: 'Forest path',
-  },
-  {
-    id: 4,
-    thumbnail: 'https://picsum.photos/id/1020/300/300?blur=2',
-    full: 'https://picsum.photos/id/1020/1200/1200',
-    width: 1200,
-    height: 1200,
-    category: 'urban',
-    alt: 'Urban street',
-  },
-];
-
-const Gallery = () => {
+export default function Gallery() {
+  const [modalMedia, setModalMedia] = useState(null);
   const [filter, setFilter] = useState('all');
-  const [layout, setLayout] = useState('masonry');
-  const [modalImage, setModalImage] = useState(null);
+  const [cards, setCards] = useState([]);
   const [isClient, setIsClient] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // Ensure client-side rendering
+  useEffect(() => {
+    fetch('/data/gallery.json')
+      .then((res) => res.json())
+      .then((data) => {
+        setCards(data);
+        // Wait for images to load
+        const images = data.flatMap((card) => 
+          card.type === 'carousel' ? card.items : [{ src: card.src, type: card.type }]
+        ).filter((item) => item.type === 'image');
+        let loadedCount = 0;
+        if (images.length === 0) {
+          setImagesLoaded(true);
+          return;
+        }
+        images.forEach((item) => {
+          const img = new Image();
+          img.src = item.src;
+          img.onload = img.onerror = () => {
+            loadedCount += 1;
+            if (loadedCount === images.length) {
+              setImagesLoaded(true);
+            }
+          };
+        });
+      })
+      .catch((err) => console.error('Failed to load gallery data:', err));
+  }, []);
+
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Filter items based on category
-  const filteredItems = filter === 'all'
-    ? galleryItems
-    : galleryItems.filter(item => item.category === filter);
+  const filteredCards = filter === 'all' 
+    ? cards 
+    : cards.filter((card) => card.categories.some((cat) => cat.toLowerCase().replace('/', '') === filter));
 
-  // Responsive breakpoints for masonry
-  const breakpointCols = {
-    350: 1,
-    750: 2,
-    1200: 3,
-  };
+  const openModal = (media) => setModalMedia(media);
+  const closeModal = () => setModalMedia(null);
 
-  // Open/close modal
-  const openModal = (item) => setModalImage(item);
-  const closeModal = () => setModalImage(null);
-
-  // Debug: Log filtered items, layout, and client status
-  useEffect(() => {
-    console.log('Is Client:', isClient);
-    console.log('Filtered Items:', filteredItems);
-    console.log('Current Layout:', layout);
-  }, [isClient, filteredItems, layout]);
-
-  // Render nothing until client-side
-  if (!isClient) {
-    return <p>Loading gallery...</p>;
-  }
+  const categories = [
+    'all',
+    'general-topic',
+    'population-charts',
+    'road-networks',
+    '3d-lidar',
+    'geography-terrain',
+  ];
 
   return (
-    <div className={styles.container}>
-      {/* Filter and Layout Controls */}
-      <div className={styles.filters}>
-        <button
-          onClick={() => setFilter('all')}
-          className={filter === 'all' ? styles.active : ''}
-          aria-label="Show all images"
-        >
-          All
-        </button>
-        <button
-          onClick={() => setFilter('nature')}
-          className={filter === 'nature' ? styles.active : ''}
-          aria-label="Show nature images"
-        >
-          Nature
-        </button>
-        <button
-          onClick={() => setFilter('urban')}
-          className={filter === 'urban' ? styles.active : ''}
-          aria-label="Show urban images"
-        >
-          Urban
-        </button>
-        <button
-          onClick={() => setLayout('grid')}
-          className={layout === 'grid' ? styles.active : ''}
-          aria-label="Switch to grid layout"
-        >
-          Grid
-        </button>
-        <button
-          onClick={() => setLayout('masonry')}
-          className={layout === 'masonry' ? styles.active : ''}
-          aria-label="Switch to masonry layout"
-        >
-          Masonry
-        </button>
-      </div>
+    <div className="flex flex-col min-h-screen">
+      <Head>
+        <title>Gallery - Witold's Data Consulting</title>
+      </Head>
+      <div className="flex-grow bg-gray-100 dark:bg-gray-900 py-8">
+        <div className="w-full max-w-none">
+          <h1 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">Data Visualization Gallery</h1>
 
-      {/* Gallery */}
-      {layout === 'grid' ? (
-        <div className={styles.grid}>
-          {filteredItems.length === 0 ? (
-            <p>No items to display</p>
-          ) : (
-            filteredItems.map(item => (
-              <div key={item.id} className={styles.gridItem}>
-                <Image
-                  src={item.thumbnail}
-                  alt={item.alt}
-                  width={300}
-                  height={300}
-                  placeholder="blur"
-                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPp6o9mwAAAABJRU5ErkJggg=="
-                  className={styles.image}
-                  onClick={() => openModal(item)}
-                  loading="lazy"
-                  onError={() => console.error(`Failed to load image: ${item.thumbnail}`)}
-                />
-              </div>
-            ))
-          )}
-        </div>
-      ) : (
-        <div>
-          {filteredItems.length === 0 ? (
-            <p>No items to display</p>
-          ) : (
-            <ResponsiveMasonry columnsCountBreakPoints={breakpointCols}>
-              <Masonry gutter="10px">
-                {filteredItems.map(item => (
-                  <div key={item.id} className={styles.masonryItem}>
-                    <Image
-                      src={item.thumbnail}
-                      alt={item.alt}
-                      width={300}
-                      height={item.height}
-                      placeholder="blur"
-                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPp6o9mwAAAABJRU5ErkJggg=="
-                      className={styles.image}
-                      onClick={() => openModal(item)}
-                      loading="lazy"
-                      onError={() => console.error(`Failed to load image: ${item.thumbnail}`)}
-                    />
-                  </div>
-                ))}
-              </Masonry>
-            </ResponsiveMasonry>
-          )}
-        </div>
-      )}
-
-      {/* Custom Modal */}
-      {modalImage && (
-        <div className={styles.modal} onClick={closeModal}>
-          <div className={styles.modalContent}>
-            <Image
-              src={modalImage.full}
-              alt={modalImage.alt}
-              width={modalImage.width}
-              height={modalImage.height}
-              className={styles.modalImage}
-              loading="eager"
-              onError={() => console.error(`Failed to load modal image: ${modalImage.full}`)}
-            />
-            <button className={styles.closeButton} onClick={closeModal} aria-label="Close modal">
-              ×
-            </button>
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setFilter(category)}
+                className={`px-4 py-2 rounded ${
+                  filter === category 
+                    ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-gray-100' 
+                    : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
+                }`}
+              >
+                {category === 'all' ? 'Show All' : category.replace(/-/g, ' ').replace('3d-lidar', '3D/LiDAR').replace(/\b\w/g, c => c.toUpperCase())}
+              </button>
+            ))}
           </div>
+
+          {isClient && imagesLoaded && (
+            <MasonryGrid
+              className="masonry-grid"
+              gap={8}
+              column={{
+                0: 1,
+                768: 2,
+                1400: 3,
+              }}
+              align="justify"
+            >
+              {filteredCards.map((card) => (
+                <Card key={card.id} card={card} openModal={openModal} />
+              ))}
+            </MasonryGrid>
+          )}
+
+          {modalMedia && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+              onClick={closeModal}
+            >
+              <div 
+                className="relative max-w-4xl w-full"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {modalMedia.type === 'image' ? (
+                  <img src={modalMedia.src} alt={modalMedia.alt} className="w-full h-auto rounded-lg" />
+                ) : (
+                  <video src={modalMedia.src} controls autoPlay className="w-full h-auto rounded-lg" />
+                )}
+                <button
+                  onClick={closeModal}
+                  className="absolute top-4 right-9 text-gray-100 text-4xl font-bold transition duration-300 hover:text-gray-300"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
-};
-
-export default Gallery;
+}

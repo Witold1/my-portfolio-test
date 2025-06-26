@@ -17,9 +17,38 @@ body, .min-h-screen {
   transition: all 0.3s ease-in-out;
 }
 
+.masonry-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  width: auto;
+  padding: 0 8px;
+  min-height: 100px; /* Prevent collapse before images load */
+}
+@media (min-width: 768px) {
+  .masonry-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1400px) {
+  .masonry-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.masonry-grid > * {
+  break-inside: avoid;
+  margin-bottom: 8px;
+  min-height: 100px; /* Ensure card space during loading */
+}
+
 .carousel-container {
   position: relative;
   width: 100%;
+  min-height: 100px; /* Prevent collapse */
 }
 .carousel-container img, .carousel-container video {
   width: 100%;
@@ -27,4 +56,5 @@ body, .min-h-screen {
   object-fit: cover;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
+  display: block;
 }

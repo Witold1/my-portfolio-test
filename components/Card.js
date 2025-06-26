@@ -10,7 +10,7 @@ export default function Card({ card, openModal }) {
     const currentItem = card.items[carouselIndex];
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-        <div className="relative w-full">
+        <div className="carousel-container">
           {currentItem.type === 'image' ? (
             <img
               src={currentItem.src}
