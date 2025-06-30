@@ -18,42 +18,79 @@ body, .min-h-screen {
 }
 
 .masonry-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
   width: auto;
   padding: 0 8px;
-  min-height: 100px; /* Prevent collapse before images load */
-}
-@media (min-width: 768px) {
-  .masonry-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 @media (min-width: 1400px) {
   .masonry-grid {
-    grid-template-columns: repeat(3, 1fr);
     max-width: 80%;
     margin-left: auto;
     margin-right: auto;
   }
 }
 
+.masonry-grid.columns-1 {
+  columns: 1;
+}
+.masonry-grid.md\\:columns-2 {
+  @media (min-width: 768px) {
+    columns: 2;
+  }
+}
+.masonry-grid.xl\\:columns-3 {
+  @media (min-width: 1400px) {
+    columns: 3;
+  }
+}
+
 .masonry-grid > * {
   break-inside: avoid;
   margin-bottom: 8px;
-  min-height: 100px; /* Ensure card space during loading */
+  width: 100%;
+  min-height: 100px;
+}
+
+.square-grid {
+  width: auto;
+  padding: 0 8px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  justify-content: center;
+}
+@media (min-width: 640px) {
+  .square-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .square-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1400px) {
+  .square-grid {
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.square-grid > * {
+  margin-bottom: 8px;
+  width: 100%;
+  min-height: 100px;
 }
 
 .carousel-container {
   position: relative;
   width: 100%;
-  min-height: 100px; /* Prevent collapse */
+  min-height: 100px;
 }
 .carousel-container img, .carousel-container video {
   width: 100%;
   height: auto;
-  object-fit: cover;
+  object-fit: contain;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
   display: block;

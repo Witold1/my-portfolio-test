@@ -26,7 +26,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-blue-600 dark:bg-gray-800 text-white p-4">
-      <div className="max-w-4xl mx-auto flex justify-between items-center">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link href="/" className="text-xl font-bold font-mono">Witold's Data</Link>
         <div className="flex items-center space-x-4">
           {/* Desktop Menu */}

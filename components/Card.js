@@ -1,27 +1,34 @@
 import { useState } from 'react';
 
-export default function Card({ card, openModal }) {
+export default function Card({ card, openModal, layoutMode }) {
   const [carouselIndex, setCarouselIndex] = useState(0);
 
   const prevImage = () => setCarouselIndex((prev) => (prev === 0 ? card.items.length - 1 : prev - 1));
   const nextImage = () => setCarouselIndex((prev) => (prev === card.items.length - 1 ? 0 : prev + 1));
 
+  const isSquare = layoutMode === 'square';
+  const mediaClass = isSquare 
+    ? 'w-full h-full object-cover'
+    : 'w-full h-auto object-contain rounded-t-lg cursor-pointer';
+  const cardClass = `bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden ${isSquare ? 'w-[300px] h-[300px]' : ''}`;
+  const containerClass = isSquare ? 'w-[300px] h-[300px] flex justify-center items-center' : 'carousel-container';
+
   if (card.type === 'carousel') {
     const currentItem = card.items[carouselIndex];
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-        <div className="carousel-container">
+      <div className={cardClass}>
+        <div className={containerClass}>
           {currentItem.type === 'image' ? (
             <img
               src={currentItem.src}
               alt={currentItem.alt}
-              className="w-full h-auto object-cover rounded-t-lg cursor-pointer"
+              className={mediaClass}
               onClick={() => openModal(currentItem)}
             />
           ) : (
             <video
               src={currentItem.src}
-              className="w-full h-auto object-cover rounded-t-lg cursor-pointer"
+              className={mediaClass}
               onClick={() => openModal(currentItem)}
               muted
             />
@@ -55,22 +62,24 @@ export default function Card({ card, openModal }) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-      {card.type === 'image' ? (
-        <img
-          src={card.src}
-          alt={card.alt}
-          className="w-full h-auto object-cover rounded-t-lg cursor-pointer"
-          onClick={() => openModal(card)}
-        />
-      ) : (
-        <video
-          src={card.src}
-          className="w-full h-auto object-cover rounded-t-lg cursor-pointer"
-          onClick={() => openModal(card)}
-          muted
-        />
-      )}
+    <div className={cardClass}>
+      <div className={isSquare ? 'w-[300px] h-[300px] flex justify-center items-center' : ''}>
+        {card.type === 'image' ? (
+          <img
+            src={card.src}
+            alt={card.alt}
+            className={mediaClass}
+            onClick={() => openModal(card)}
+          />
+        ) : (
+          <video
+            src={card.src}
+            className={mediaClass}
+            onClick={() => openModal(card)}
+            muted
+          />
+        )}
+      </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{card.title}</h3>
         <p className="text-sm text-gray-600 dark:text-gray-400">{card.description}</p>

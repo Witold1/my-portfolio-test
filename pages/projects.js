@@ -1,17 +1,22 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import fs from 'fs';
+import path from 'path';
 
-export default function Projects() {
-  const [posts, setPosts] = useState([]);
+export async function getStaticProps() {
+  const filePath = path.join(process.cwd(), 'public/data/projects.json');
+  try {
+    const posts = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    return { props: { posts } };
+  } catch (err) {
+    console.error('Failed to load projects data:', err);
+    return { props: { posts: [] } };
+  }
+}
+
+export default function Projects({ posts }) {
   const [filter, setFilter] = useState('all');
-
-  useEffect(() => {
-    fetch('/data/projects.json')
-      .then((res) => res.json())
-      .then((data) => setPosts(data))
-      .catch((err) => console.error('Failed to load projects data:', err));
-  }, []);
 
   const filteredPosts = filter === 'all' ? posts : posts.filter((post) => post.major && filter === 'major');
 

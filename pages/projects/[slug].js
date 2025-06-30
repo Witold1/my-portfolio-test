@@ -62,13 +62,13 @@ export default function Post({ post }) {
           onClick={closeModal}
         >
           <div 
-            className="relative max-w-4xl w-full"
+            className="relative w-[80vw] max-h-[80vh] max-w-none overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <img src={modalImage} alt="Modal Image" className="w-full h-auto rounded-lg" />
+            <img src={modalImage} alt="Modal Image" className="w-full h-auto object-contain rounded-lg" />
             <button
               onClick={closeModal}
-              className="absolute top-4 right-9 text-gray-100 text-4xl font-bold transition duration-300 hover:text-gray-300"
+              className="absolute top-4 right-4 text-gray-100 text-4xl font-bold transition duration-300 hover:text-gray-300"
             >
               ×
             </button>

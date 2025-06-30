@@ -1,130 +1,148 @@
-import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import { MasonryGrid } from '@egjs/react-grid';
-import Card from '../components/Card';
+import { useState, useMemo, useEffect } from 'react';
+import GalleryGridVariable from '../components/Gallery.Grid.Variable';
+import GalleryGridUniform from '../components/Gallery.Grid.Uniform';
+import { getGalleryCategories, filterGalleryItems } from '../lib/galleryUtils';
+import galleryData from '../data/gallery-data.json'; // Adjust to public/data/ if needed
 
-export default function Gallery() {
-  const [modalMedia, setModalMedia] = useState(null);
+export async function getStaticProps() {
+  console.log('getStaticProps: galleryData length:', galleryData.length); // Debug
+  return {
+    props: {
+      galleryData,
+    },
+  };
+}
+
+export default function Gallery({ galleryData }) {
+  console.log('Gallery: galleryData length:', galleryData.length); // Debug
+  const [gridType, setGridType] = useState('variable');
   const [filter, setFilter] = useState('all');
-  const [cards, setCards] = useState([]);
-  const [isClient, setIsClient] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [page, setPage] = useState(1);
+  const [showTopButton, setShowTopButton] = useState(false);
+  const itemsPerPage = 25;
 
+  const categories = useMemo(() => getGalleryCategories(galleryData), [galleryData]);
+  const filteredItems = useMemo(() => filterGalleryItems(galleryData, filter), [galleryData, filter]);
+  const paginatedItems = useMemo(
+    () => filteredItems.slice(0, page * itemsPerPage),
+    [filteredItems, page]
+  );
+
+  // Handle scroll to show/hide "to the top" button
   useEffect(() => {
-    fetch('/data/gallery.json')
-      .then((res) => res.json())
-      .then((data) => {
-        setCards(data);
-        // Wait for images to load
-        const images = data.flatMap((card) => 
-          card.type === 'carousel' ? card.items : [{ src: card.src, type: card.type }]
-        ).filter((item) => item.type === 'image');
-        let loadedCount = 0;
-        if (images.length === 0) {
-          setImagesLoaded(true);
-          return;
-        }
-        images.forEach((item) => {
-          const img = new Image();
-          img.src = item.src;
-          img.onload = img.onerror = () => {
-            loadedCount += 1;
-            if (loadedCount === images.length) {
-              setImagesLoaded(true);
-            }
-          };
-        });
-      })
-      .catch((err) => console.error('Failed to load gallery data:', err));
+    const handleScroll = () => {
+      setShowTopButton(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-  const filteredCards = filter === 'all' 
-    ? cards 
-    : cards.filter((card) => card.categories.some((cat) => cat.toLowerCase().replace('/', '') === filter));
-
-  const openModal = (media) => setModalMedia(media);
-  const closeModal = () => setModalMedia(null);
-
-  const categories = [
-    'all',
-    'general-topic',
-    'population-charts',
-    'road-networks',
-    '3d-lidar',
-    'geography-terrain',
-  ];
+  console.log('Gallery: categories:', categories); // Debug
+  console.log('Gallery: filteredItems length:', filteredItems.length); // Debug
+  console.log('Gallery: paginatedItems length:', paginatedItems.length); // Debug
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Head>
-        <title>Gallery - Witold's Data Consulting</title>
-      </Head>
-      <div className="flex-grow bg-gray-100 dark:bg-gray-900 py-8">
-        <div className="w-full max-w-none">
-          <h1 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">Data Visualization Gallery</h1>
-
-          <div className="flex flex-wrap justify-center gap-2 mb-6">
+    <div className="container mx-auto px-4 py-8 max-w-7xl relative">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+          Data and information visualization pond ⛵
+        </h1>
+        <p className="mb-2 text-gray-700 dark:text-gray-300">
+          ⇱ Click preview images to enlarge in better quality
+        </p>
+        <p className="mb-2 text-gray-700 dark:text-gray-300">
+          ⟳ Check github project repositories to see raw code
+        </p>
+        <p className="text-gray-700 dark:text-gray-300">
+          ⛟ Some elements may display differently across platforms (desktop, smartphone, etc)
+        </p>
+      </div>
+      <div className="mb-6 flex flex-wrap gap-4 items-center gallery-controls">
+        <div className="flex gap-2">
+          <label className="font-semibold text-gray-900 dark:text-gray-100">Filter:</label>
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="border rounded px-2 py-1 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+          >
             {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setFilter(category)}
-                className={`px-4 py-2 rounded ${
-                  filter === category 
-                    ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-gray-100' 
-                    : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
-                }`}
-              >
-                {category === 'all' ? 'Show All' : category.replace(/-/g, ' ').replace('3d-lidar', '3D/LiDAR').replace(/\b\w/g, c => c.toUpperCase())}
-              </button>
+              <option key={category} value={category}>
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </option>
             ))}
-          </div>
-
-          {isClient && imagesLoaded && (
-            <MasonryGrid
-              className="masonry-grid"
-              gap={8}
-              column={{
-                0: 1,
-                768: 2,
-                1400: 3,
-              }}
-              align="justify"
-            >
-              {filteredCards.map((card) => (
-                <Card key={card.id} card={card} openModal={openModal} />
-              ))}
-            </MasonryGrid>
-          )}
-
-          {modalMedia && (
-            <div 
-              className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
-              onClick={closeModal}
-            >
-              <div 
-                className="relative max-w-4xl w-full"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {modalMedia.type === 'image' ? (
-                  <img src={modalMedia.src} alt={modalMedia.alt} className="w-full h-auto rounded-lg" />
-                ) : (
-                  <video src={modalMedia.src} controls autoPlay className="w-full h-auto rounded-lg" />
-                )}
-                <button
-                  onClick={closeModal}
-                  className="absolute top-4 right-9 text-gray-100 text-4xl font-bold transition duration-300 hover:text-gray-300"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          )}
+          </select>
+        </div>
+        <div className="flex gap-2">
+          <label className="font-semibold text-gray-900 dark:text-gray-100">Grid Type:</label>
+          <button
+            onClick={() => setGridType('variable')}
+            className={`px-3 py-1 rounded ${
+              gridType === 'variable'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-900 dark:bg-gray-600 dark:text-gray-100'
+            }`}
+          >
+            Variable
+          </button>
+          <button
+            onClick={() => setGridType('uniform')}
+            className={`px-3 py-1 rounded ${
+              gridType === 'uniform'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-900 dark:bg-gray-600 dark:text-gray-100'
+            }`}
+          >
+            Uniform
+          </button>
         </div>
       </div>
+      {paginatedItems.length > 0 ? (
+        <>
+          {gridType === 'variable' ? (
+            <GalleryGridVariable items={paginatedItems} />
+          ) : (
+            <GalleryGridUniform items={paginatedItems} />
+          )}
+          {paginatedItems.length < filteredItems.length && (
+            <button
+              onClick={() => setPage(page + 1)}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded dark:bg-blue-600"
+            >
+              Load More
+            </button>
+          )}
+        </>
+      ) : (
+        <p className="text-gray-700 dark:text-gray-300">No items match the selected filter.</p>
+      )}
+      {showTopButton && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
+          aria-label="Scroll to top"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 10l7-7m0 0l7 7m-7-7v18"
+            />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
