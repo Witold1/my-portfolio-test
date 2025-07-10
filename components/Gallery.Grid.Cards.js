@@ -3,20 +3,24 @@
 import { memo } from 'react';
 import Image from 'next/image';
 
-const Card = memo(({ id, 'content-type': contentType, src, categories, className, gridType }) => {
+const Card = memo(({ id, 'content-type': contentType, src, categories, className, gridType, onClick, title, notes, link }) => {
+  console.log('Card: id:', id, 'contentType:', contentType, 'gridType:', gridType); // Debug
   const isUniform = gridType === 'uniform';
 
   return (
-    <div className={`bg-white rounded-lg shadow-md overflow-hidden ${className}`}>
+    <div
+      className={`bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden ${className} cursor-pointer`}
+      onClick={() => onClick({ id, 'content-type': contentType, src, categories, title, notes, link })}
+    >
       {contentType === 'image' && (
         <div className={`relative w-full ${isUniform ? 'h-full' : 'h-auto'}`}>
           <Image
             src={src}
-            alt={`Gallery item ${id} - ${categories.join(', ')}`}
+            alt={title || `Gallery item ${id} - ${categories.join(', ')}`}
             fill={isUniform}
             width={!isUniform ? 0 : undefined}
             height={!isUniform ? 0 : undefined}
-            sizes={'(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'}
+            sizes={isUniform ? '(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw' : '100vw'}
             style={!isUniform ? { width: '100%', height: 'auto' } : undefined}
             className={isUniform ? 'object-cover' : 'object-contain'}
             loading="lazy"
@@ -49,12 +53,12 @@ const Card = memo(({ id, 'content-type': contentType, src, categories, className
         </div>
       )}
       {contentType === 'carousel' && (
-        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+        <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700">
           <p>Carousel Placeholder (TBD)</p>
         </div>
       )}
       {!['image', 'video', 'carousel'].includes(contentType) && (
-        <p>Unsupported content type: {contentType}</p>
+        <p className="text-gray-700 dark:text-gray-300">Unsupported content type: {contentType}</p>
       )}
     </div>
   );
