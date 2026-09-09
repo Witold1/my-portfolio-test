@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import { useEffect } from 'react';
-import Analytics from '../components/Analytics';
+import Telemetry from '../components/Telemetry';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import DebugSectionGate from '../components/DebugSectionGate';
@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }) {
         <DebugSectionGate />
         <Footer />
         <ScrollToTop />
-        <Analytics />
+        <Telemetry />
       </div>
     </AdminPrefsProvider>
   );

@@ -6,6 +6,7 @@ const nextConfig = {
   basePath: '/portfolio',
   assetPrefix: '/portfolio/',
   trailingSlash: true,
+  transpilePackages: ['witold1-blog-telemetry'],
   env: {
     NEXT_PUBLIC_APP_VERSION: pkg.version,
     NEXT_PUBLIC_BASE_PATH: '/portfolio',
