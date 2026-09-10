@@ -1,5 +1,7 @@
 'use client';
 
+import ToolbarIcon from '../content/ToolbarIcon';
+
 export default function GalleryGridLayoutToolbar({
   gridType,
   onUniform,
@@ -21,22 +23,7 @@ export default function GalleryGridLayoutToolbar({
         aria-label="Uniform grid: same width, same height"
         title="Same width, same height"
       >
-        <svg
-          className="gallery-grid-toggle-icon"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden
-        >
-          <rect x="3" y="3" width="7" height="7" />
-          <rect x="14" y="3" width="7" height="7" />
-          <rect x="3" y="14" width="7" height="7" />
-          <rect x="14" y="14" width="7" height="7" />
-        </svg>
+        <ToolbarIcon name="layout-grid" />
         <span>Uniform</span>
       </button>
       <button
@@ -47,22 +34,7 @@ export default function GalleryGridLayoutToolbar({
         aria-label="Variable grid: same width, but height changes"
         title="Same width, but height changes"
       >
-        <svg
-          className="gallery-grid-toggle-icon"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden
-        >
-          <rect x="3" y="5" width="7" height="4" />
-          <rect x="16" y="3" width="3" height="7" />
-          <rect x="5" y="14" width="3" height="7" />
-          <rect x="14" y="16" width="7" height="4" />
-        </svg>
+        <ToolbarIcon name="layout-grid-aspect" />
         <span>Variable</span>
       </button>
     </div>

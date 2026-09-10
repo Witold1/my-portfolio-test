@@ -1,6 +1,6 @@
 /**
  * Shared shapes for MDX frontmatter loaded via `lib/content`.
- * Authoring overview: `docs/content-schema.md`.
+ * Authoring overview: `content/content-schema.md`.
  *
  * @typedef {Object} ContentFrontmatterBase
  * @property {string} slug Derived from file path (no `.mdx`)

@@ -7,17 +7,17 @@ export default function ContentLayout({ title, subtitle, metaLine, tags, childre
   return (
     <div className={`flex-grow py-8 ${className}`}>
       <article className="max-w-5xl mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">{title}</h1>
-        {subtitle ? <p className="text-gray-700 dark:text-gray-300 mb-2">{subtitle}</p> : null}
+        <h1 className="content-title">{title}</h1>
+        {subtitle ? <p className="content-subtitle">{subtitle}</p> : null}
         {metaLine ? (
           <p
-            className={`text-sm text-gray-600 dark:text-gray-400 ${tagList.length ? 'mb-2' : 'mb-6'}`}
+            className={`content-meta-line${tagList.length ? ' content-meta-line--before-tags' : ' content-meta-line--before-body'}`}
           >
             {metaLine}
           </p>
         ) : null}
         {tagList.length ? (
-          <div className="flex flex-wrap gap-2 mb-3" role="list" aria-label="Tags">
+          <div className="content-tag-index mb-3" role="list" aria-label="Tags">
             {tagList.map((tag) => (
               <Link
                 key={tag}

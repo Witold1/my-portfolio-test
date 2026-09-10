@@ -17,7 +17,7 @@
  * @property {GalleryItemType} type
  * @property {string} src Thumbnail / primary media URL (carousel may use first slide)
  * @property {string} title
- * @property {string[]} categories Values from `config/gallery-settings.json`
+ * @property {string[]} categories Values from `content/config/gallery-settings.json`
  * @property {GallerySlide[]} [slides] Present when `type === 'carousel'`
  * @property {string} [subtitle] Also accepted from YAML as `suptitle`
  * @property {string} [date] `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`

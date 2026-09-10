@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { getAllContent } from '../lib/content';
 import { filterVisibleContent } from '../lib/content/hidden';
 import ContentCard from '../components/content/ContentCard';
+import ContentLayoutToolbar from '../components/content/ContentLayoutToolbar';
 import PageMeta from '../components/content/PageMeta';
 import ContentBreadcrumb from '../components/content/ContentBreadcrumb';
 import { useAdminPrefs } from '../components/admin/AdminPrefsProvider';
@@ -17,6 +18,7 @@ export async function getStaticProps() {
 
 export default function ProjectsIndex({ projects }) {
   const { showHiddenGallery } = useAdminPrefs();
+  const [layout, setLayout] = useState('list');
   const visibleProjects = useMemo(
     () => filterVisibleContent(projects, { showHidden: showHiddenGallery }),
     [projects, showHiddenGallery],
@@ -35,20 +37,33 @@ export default function ProjectsIndex({ projects }) {
             <ContentBreadcrumb items={projectsBreadcrumbItems} />
           </div>
           <div className="content-index-body">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {visibleProjects.map((project) => (
-                <ContentCard
-                  key={project.slug}
-                  kind="project"
-                  href={`/projects/${project.slug}`}
-                  title={project.title}
-                  subtitle={project.subtitle}
-                  excerpt={project.excerpt}
-                  date={project.date}
-                  year={project.year}
-                  image={project.coverImage}
-                />
-              ))}
+            <div className="content-primary-stack">
+              {visibleProjects.length > 0 ? (
+                <div className="content-primary-controls">
+                  <ContentLayoutToolbar
+                    layout={layout}
+                    onGrid={() => setLayout('grid')}
+                    onList={() => setLayout('list')}
+                  />
+                </div>
+              ) : null}
+              <div
+                className={`content-primary${layout === 'list' ? ' content-primary--list' : ''}`}
+              >
+                {visibleProjects.map((project) => (
+                  <ContentCard
+                    key={project.slug}
+                    kind="project"
+                    href={`/projects/${project.slug}`}
+                    title={project.title}
+                    subtitle={project.subtitle}
+                    excerpt={project.excerpt}
+                    date={project.date}
+                    year={project.year}
+                    image={project.coverImage}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

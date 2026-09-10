@@ -38,6 +38,19 @@ function bibtexCitationKey(m) {
   return normalizeWitoldCiteKey(raw);
 }
 
+/** ISO `YYYY-MM-DD` for BibTeX `urldate`; long en-US for plain “Accessed …”. */
+export function formatAccessedDate(date = new Date()) {
+  const d = date instanceof Date ? date : new Date(date);
+  if (Number.isNaN(d.getTime())) return null;
+  const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const human = d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  return { iso, human };
+}
+
 /**
  * @param {object} m
  * @param {string} m.workTitle
@@ -47,6 +60,8 @@ function bibtexCitationKey(m) {
  * @param {string} [m.organization] Used for plain-text citation only (not written to BibTeX).
  * @param {string} [m.citeKey] Base key (e.g. blog_slug); normalized to witold_blog_slug.
  * @param {'misc'|'online'} [m.entryType]
+ * @param {string} [m.accessed] Human access date (e.g. September 10, 2026)
+ * @param {string} [m.urldate] ISO access date for BibTeX (e.g. 2026-09-10)
  */
 export function buildPlainCitation(m) {
   const author = m.author || 'Author';
@@ -54,7 +69,8 @@ export function buildPlainCitation(m) {
   const title = m.workTitle || 'Untitled';
   const org = m.organization ? ` ${m.organization}.` : '';
   const url = m.url ? ` ${m.url}` : '';
-  return `${title} (${year}), ${author}.${org}${url}`.trim();
+  const accessed = m.accessed ? ` Accessed ${m.accessed}.` : '';
+  return `${title} (${year}), ${author}.${org}${url}${accessed}`.trim();
 }
 
 export function buildBibTeX(m) {
@@ -67,6 +83,7 @@ export function buildBibTeX(m) {
   ];
   if (m.year != null) lines.push(`  year = ${bibtexBrace(String(m.year))},`);
   if (m.url) lines.push(`  url = ${bibtexBrace(m.url)},`);
+  if (m.urldate) lines.push(`  urldate = ${bibtexBrace(String(m.urldate))},`);
   lines.push('}');
   return lines.join('\n');
 }

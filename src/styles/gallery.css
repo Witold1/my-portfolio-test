@@ -830,11 +830,19 @@ html.dark .gallery-lightbox-backdrop {
   line-height: 1.25;
 }
 
-.gallery-grid-toggle-icon {
+.gallery-grid-toggle-icon,
+.toolbar-icon {
+  display: inline-block;
   flex-shrink: 0;
   width: 1.125rem;
   height: 1.125rem;
   opacity: 0.92;
+}
+
+.toolbar-icon {
+  background-color: currentColor;
+  -webkit-mask: var(--toolbar-icon) center / contain no-repeat;
+  mask: var(--toolbar-icon) center / contain no-repeat;
 }
 
 .gallery-load-more {

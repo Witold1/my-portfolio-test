@@ -48,10 +48,10 @@ Visualizations are one YAML file per item in `content/gallery/items/`:
 - MDX content root: `content/` (see `content/_README.md` for layout)
 - Blog posts: `content/blogposts/*.mdx` → `/blog` and `/blog/[slug]`
 - Project posts: `content/projects/*.mdx` → `/projects` and `/projects/[...slug]`
-- Gallery data: `content/gallery/items/*.yaml` + `config/gallery-settings.json` (loaded at build via `src/lib/gallery/loadItems.js`)
-- Site config: `config/popular-posts.json`, `config/home-mosaic.json`
+- Gallery data: `content/gallery/items/*.yaml` + `content/config/gallery-settings.json` (loaded at build via `src/lib/gallery/loadItems.js`)
+- Site config: `content/config/popular-posts.json`, `content/config/home-mosaic.json`
 
-Media files are not stored in this repo. Set `mediaBaseUrl` in `config/gallery-settings.json` (or `NEXT_PUBLIC_MEDIA_BASE_URL`) and keep CDN-relative keys in YAML/MDX.
+Media files are not stored in this repo. Set `mediaBaseUrl` in `content/config/gallery-settings.json` (or `NEXT_PUBLIC_MEDIA_BASE_URL`) and keep CDN-relative keys in YAML/MDX.
 
 ## Pages
 
@@ -120,7 +120,7 @@ Live site: [https://witold1.github.io/portfolio/](https://witold1.github.io/port
 - **403 on Actions:** grant Read and write in Settings → Actions → General.
 - **Links ignore `basePath`:** `basePath` must match the repo name; check `out/` for `index.html` under each route.
 - **CSS missing:** verify `tailwind.config.js`, `postcss.config.js`, and `out/_next/static/css/`.
-- **Images missing:** `src` in `content/gallery/items/*.yaml` should be CDN-relative keys; check `config/gallery-settings.json` / `NEXT_PUBLIC_MEDIA_BASE_URL`.
+- **Images missing:** `src` in `content/gallery/items/*.yaml` should be CDN-relative keys; check `content/config/gallery-settings.json` / `NEXT_PUBLIC_MEDIA_BASE_URL`.
 - **Theme:** stored preference vs system; `dark` class should toggle on `<html>`.
 - **Duplicate footer:** only `src/pages/_app.js` should render `<Footer />`.
 - **Build errors on projects:** `src/pages/projects/[...slug].js` `getStaticPaths` / `getStaticProps` must match files under `content/projects/`.

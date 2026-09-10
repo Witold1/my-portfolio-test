@@ -1,7 +1,11 @@
 'use client';
 
-import { useMemo } from 'react';
-import { buildBibTeX, buildPlainCitation } from '../../lib/content/citationFormats';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  buildBibTeX,
+  buildPlainCitation,
+  formatAccessedDate,
+} from '../../lib/content/citationFormats';
 import { mergeCitationPageMeta } from '../../lib/content/citation';
 import { slugifyHeading } from '../../lib/content/toc';
 import { useCopyToClipboard } from '../../lib/useCopyToClipboard';
@@ -53,22 +57,42 @@ export default function CitationBox({
     [pageMeta, citeMeta, ignorePageMeta]
   );
 
-  const derived = useMemo(() => {
+  const [accessed, setAccessed] = useState(null);
+  useEffect(() => {
+    setAccessed(formatAccessedDate(new Date()));
+  }, []);
+
+  const metaWithAccess = useMemo(() => {
     if (!mergedMeta || typeof mergedMeta !== 'object') return null;
-    const plain = buildPlainCitation(mergedMeta);
-    const bibtex = buildBibTeX(mergedMeta);
+    if (!accessed) return mergedMeta;
+    return {
+      ...mergedMeta,
+      accessed: accessed.human,
+      urldate: accessed.iso,
+    };
+  }, [mergedMeta, accessed]);
+
+  const derived = useMemo(() => {
+    if (!metaWithAccess) return null;
+    const plain = buildPlainCitation(metaWithAccess);
+    const bibtex = buildBibTeX(metaWithAccess);
     return { plain, bibtex };
-  }, [mergedMeta]);
+  }, [metaWithAccess]);
+
+  const accessedNote = accessed ? `Accessed ${accessed.human}.` : '';
 
   const content = citation || children || (derived ? derived.plain : null);
   const linkUrl = url ?? mergedMeta?.url;
 
-  const attributionSnippetText =
-    typeof content === 'string'
-      ? content
-      : derived
-        ? derived.plain
-        : '';
+  const attributionSnippetText = (() => {
+    if (typeof content === 'string') {
+      if (!accessedNote) return content;
+      if (/accessed\s+/i.test(content)) return content;
+      return `${content.replace(/\s+$/, '')} ${accessedNote}`;
+    }
+    if (derived) return derived.plain;
+    return '';
+  })();
 
   const showSnippets =
     codeSnippet && (Boolean(attributionSnippetText) || Boolean(derived));
@@ -134,12 +158,16 @@ export default function CitationBox({
                 <MdxLink href={linkUrl} className="mdx-citation-snippet-url">
                   {linkUrl}
                 </MdxLink>
+                {accessedNote ? `\n${accessedNote}` : null}
               </code>
             </pre>
           </div>
           {copyFormats ? (
             <div className="mdx-citation-actions" role="group" aria-label="Copy citation formats">
-              <CopyBtn label="Plain" text={linkUrl} />
+              <CopyBtn
+                label="Plain"
+                text={[linkUrl, accessedNote].filter(Boolean).join('\n')}
+              />
             </div>
           ) : null}
         </div>

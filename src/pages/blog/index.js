@@ -14,6 +14,7 @@ import {
 } from '../../lib/content/tags';
 import ContentCard from '../../components/content/ContentCard';
 import ContentLayoutToolbar from '../../components/content/ContentLayoutToolbar';
+import ToolbarIcon from '../../components/content/ToolbarIcon';
 import PageMeta from '../../components/content/PageMeta';
 import ContentBreadcrumb from '../../components/content/ContentBreadcrumb';
 import { useAdminPrefs } from '../../components/admin/AdminPrefsProvider';
@@ -28,7 +29,7 @@ export async function getStaticProps() {
 export default function BlogIndex({ posts }) {
   const router = useRouter();
   const { showHiddenGallery } = useAdminPrefs();
-  const [layout, setLayout] = useState('grid');
+  const [layout, setLayout] = useState('list');
   const visiblePosts = useMemo(
     () => filterVisibleContent(posts, { showHidden: showHiddenGallery }),
     [posts, showHiddenGallery],
@@ -128,6 +129,11 @@ export default function BlogIndex({ posts }) {
             <div className="content-primary-stack">
               {filteredPosts.length > 0 ? (
                 <div className="content-primary-controls">
+                  <ContentLayoutToolbar
+                    layout={layout}
+                    onGrid={() => setLayout('grid')}
+                    onList={() => setLayout('list')}
+                  />
                   <div className="content-sort" role="group" aria-label="Sort posts">
                     <span className="content-section-label">Order</span>
                     <Link
@@ -135,21 +141,18 @@ export default function BlogIndex({ posts }) {
                       className={`content-sort-link${sortMode === 'featured' ? ' content-sort-link--active' : ''}`}
                       aria-current={sortMode === 'featured' ? 'true' : undefined}
                     >
-                      Featured first
+                      <ToolbarIcon name="order-featured" />
+                      <span>Featured first</span>
                     </Link>
                     <Link
                       href={blogIndexHref({ tag: activeTagSlug, sort: 'time' })}
                       className={`content-sort-link${sortMode === 'time' ? ' content-sort-link--active' : ''}`}
                       aria-current={sortMode === 'time' ? 'true' : undefined}
                     >
-                      Newest first
+                      <ToolbarIcon name="order-newest" />
+                      <span>Newest first</span>
                     </Link>
                   </div>
-                  <ContentLayoutToolbar
-                    layout={layout}
-                    onGrid={() => setLayout('grid')}
-                    onList={() => setLayout('list')}
-                  />
                 </div>
               ) : null}
               <div

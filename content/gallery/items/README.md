@@ -8,7 +8,7 @@ Normalized field shapes (for editors / loaders): `lib/gallery/types.js`.
 
 - `title` - display name
 - `src` - image URL or CDN-relative key (see below); optional for `type: carousel` when `slides` has a first `src`
-- `categories` - one or more values from `config/gallery-settings.json`
+- `categories` - one or more values from `content/config/gallery-settings.json`
 
 ## Optional fields
 
@@ -93,7 +93,7 @@ slides:
 
 ## CDN-ready `src`
 
-Use a relative key when `mediaBaseUrl` is set in `config/gallery-settings.json` or `NEXT_PUBLIC_MEDIA_BASE_URL`:
+Use a relative key when `mediaBaseUrl` is set in `content/config/gallery-settings.json` or `NEXT_PUBLIC_MEDIA_BASE_URL`:
 
 ```yaml
 src: gallery/road-network-chart-south-koreas/road-network-chart-south-koreas--1.webp

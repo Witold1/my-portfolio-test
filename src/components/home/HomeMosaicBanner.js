@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 /**
  * Draft home banner: flat mosaic of gallery stills.
- * Click a tile to reveal its title (curate via config/home-mosaic.json).
+ * Click a tile to reveal its title (curate via content/config/home-mosaic.json).
  */
 export default function HomeMosaicBanner({ tiles }) {
   const [openId, setOpenId] = useState(null);
