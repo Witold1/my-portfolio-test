@@ -47,7 +47,7 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
   const loadError = galleryLoadError;
   const { showHiddenGallery } = useAdminPrefs();
   const [gridType, setGridType] = useState('uniform');
-  const [filter, setFilter] = useState(() => ['all']);
+  const [filter, setFilter] = useState('all');
   const [page, setPage] = useState(1);
   const itemsPerPage = 15;
 
@@ -63,7 +63,7 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
 
   useEffect(() => {
     setPage(1);
-  }, [filter.join('\0')]);
+  }, [filter]);
 
   const categories = useMemo(
     () => getGalleryCategories(visibleItems, galleryCategories),
@@ -76,18 +76,9 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
   );
 
   const modalDescription = modalItem ? galleryNotesToMetaString(modalItem.notes) : '';
-  const showingAll = filter.includes('all') || filter.length === 0;
 
-  const toggleCategory = (cat) => {
-    setFilter((prev) => {
-      if (cat === 'all') return ['all'];
-      const specifics = prev.filter((c) => c !== 'all');
-      if (specifics.includes(cat)) {
-        const next = specifics.filter((c) => c !== cat);
-        return next.length === 0 ? ['all'] : next;
-      }
-      return [...specifics, cat];
-    });
+  const selectCategory = (cat) => {
+    setFilter((prev) => (cat !== 'all' && prev === cat ? 'all' : cat));
   };
 
   return (
@@ -124,19 +115,18 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
               <div className="mb-6 gallery-controls flex flex-col gap-3 max-w-full">
                 <div
                   role="group"
-                  aria-label="Filter by category; multiple categories combine with OR"
+                  aria-label="Filter by category"
                   className="gallery-cat-row"
                 >
                   {categories.map((category) => {
-                    const pressed =
-                      category === 'all' ? showingAll : !showingAll && filter.includes(category);
+                    const pressed = filter === category;
                     return (
                       <button
                         key={category}
                         type="button"
                         aria-pressed={pressed}
                         disabled={!!loadError}
-                        onClick={() => toggleCategory(category)}
+                        onClick={() => selectCategory(category)}
                         className={`gallery-cat-chip${pressed ? ' gallery-cat-chip--active' : ''}`}
                       >
                         {formatGalleryCategoryLabel(category)}

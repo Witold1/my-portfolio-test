@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import ToolbarIcon from './content/ToolbarIcon';
 import { useEscapeToClose } from '../lib/useEscapeToClose';
 
 const QRCode = dynamic(() => import('react-qr-code'), { ssr: false });
@@ -12,37 +13,6 @@ const iconBtnClass =
 
 const iconBtnLightboxClass =
   'gallery-lightbox-share-btn inline-flex items-center justify-center w-7 h-7 rounded-full text-inherit transition-colors';
-
-const iconClass = 'w-4 h-4 shrink-0';
-
-const iconClassLightbox = 'w-3.5 h-3.5 shrink-0';
-
-function QrCodeIcon({ className }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <rect x="2" y="2" width="8" height="8" />
-      <path d="M6 6h.01" />
-      <rect x="14" y="2" width="8" height="8" />
-      <path d="M18 6h.01" />
-      <rect x="2" y="14" width="8" height="8" />
-      <path d="M6 18h.01" />
-      <path d="M14 14h.01" />
-      <path d="M18 18h.01" />
-      <path d="M18 22h4v-4" />
-      <path d="M14 18v4" />
-      <path d="M22 14h-4" />
-    </svg>
-  );
-}
 
 /**
  * QR code share control — opens a small popover on click.
@@ -55,7 +25,7 @@ export default function ShareQrCodeButton({ url, variant = 'default' }) {
   const popoverId = useId();
   const isLightbox = variant === 'lightbox';
   const btnClass = isLightbox ? iconBtnLightboxClass : iconBtnClass;
-  const svgClass = isLightbox ? iconClassLightbox : iconClass;
+  const iconSize = isLightbox ? '0.875rem' : '1rem';
 
   const close = useCallback(() => setOpen(false), []);
   useEscapeToClose(close, { enabled: open });
@@ -107,7 +77,7 @@ export default function ShareQrCodeButton({ url, variant = 'default' }) {
         aria-expanded={open}
         aria-controls={open ? popoverId : undefined}
       >
-        <QrCodeIcon className={svgClass} />
+        <ToolbarIcon name="share-qr" size={iconSize} />
       </button>
       {open
         ? isLightbox && mounted

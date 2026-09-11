@@ -4,7 +4,7 @@ import galleryConfig from '../../../content/config/gallery-settings.json';
 import { inferMediaTypeFromSrc } from '../../lib/inferMediaType';
 import { getMediaBaseUrl, resolveMediaUrl } from '../../lib/mediaUrl';
 
-export default function Carousel({ items = [], startIndex = 0, caption, aspect = 'wide' }) {
+export default function Carousel({ items = [], startIndex = 0, caption, aspect }) {
   const mediaBaseUrl = getMediaBaseUrl(galleryConfig.mediaBaseUrl);
   const safeItems = useMemo(
     () =>
@@ -23,6 +23,7 @@ export default function Carousel({ items = [], startIndex = 0, caption, aspect =
   const src = current?.src;
   const isVideo = inferMediaTypeFromSrc(src, current?.type) === 'video';
   const alt = current?.alt || caption || 'Carousel item';
+  const hasFixedAspect = typeof aspect === 'string' && aspect.trim().length > 0;
 
   const prev = () => setIndex((i) => (i === 0 ? safeItems.length - 1 : i - 1));
   const next = () => setIndex((i) => (i === safeItems.length - 1 ? 0 : i + 1));
@@ -30,7 +31,10 @@ export default function Carousel({ items = [], startIndex = 0, caption, aspect =
   return (
     <section className="mdx-carousel">
       {caption ? <p className="mdx-carousel-caption">{caption}</p> : null}
-      <div className={`mdx-carousel-frame mdx-carousel-${aspect}`}>
+      <div
+        className={`mdx-carousel-frame${hasFixedAspect ? ' mdx-carousel-frame--fixed' : ''}`}
+        style={hasFixedAspect ? { aspectRatio: aspect } : undefined}
+      >
         {isVideo ? (
           <video
             src={src}

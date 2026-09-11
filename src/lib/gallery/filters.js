@@ -16,24 +16,14 @@ export function getGalleryCategories(galleryData, configuredCategories) {
 }
 
 /**
- * @param {string | string[]} filter - `'all'`, a single category, or an OR-list of categories (omit `'all'` when using multiple).
+ * @param {string} filter - `'all'` or a single category slug.
  */
 export function filterGalleryItems(galleryData, filter) {
-  const tags = normalizeFilterTags(filter);
-  if (tags.length === 0) return galleryData;
+  if (filter == null || filter === 'all') return galleryData;
   return galleryData.filter((item) => {
     const categories = Array.isArray(item?.categories) ? item.categories : [];
-    return tags.some((t) => categories.includes(t));
+    return categories.includes(filter);
   });
-}
-
-/** @param {string | string[]} filter */
-function normalizeFilterTags(filter) {
-  if (filter == null || filter === 'all') return [];
-  if (typeof filter === 'string') return [filter];
-  if (!Array.isArray(filter) || filter.length === 0) return [];
-  if (filter.includes('all')) return [];
-  return filter.filter((c) => c !== 'all');
 }
 
 /** Human-readable label for a gallery category slug. */

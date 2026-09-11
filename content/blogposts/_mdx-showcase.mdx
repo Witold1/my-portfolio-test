@@ -191,7 +191,6 @@ On blog and project pages, a **collapsible table of contents** is rendered autom
 
       <Carousel
         caption="Carousel nested inside CollapsibleSection (click image for modal)"
-        aspect="wide"
         items={[
           { src: "https://picsum.photos/1200/800?random=701", alt: "Wide still 1" },
           { src: "https://picsum.photos/800/1200?random=702", alt: "Portrait still 2" },
@@ -207,18 +206,17 @@ On blog and project pages, a **collapsible table of contents** is rendered autom
 
     <CollapsibleSection title="Prose, then square carousel, then closing paragraph" level={4} defaultOpen={false}>
 
-      Square framing works well for thumbnails, UI screenshots, or maps where width and height should feel balanced. Intro paragraph ends here.
+      Square stills work well for thumbnails, UI screenshots, or maps where width and height should feel balanced. Intro paragraph ends here.
 
       <Carousel
-        caption="Square aspect carousel for uniform tiles"
-        aspect="square"
+        caption="Natural-size carousel (frame follows each image)"
         items={[
           { src: "https://picsum.photos/900/900?random=801", alt: "Square frame 1" },
           { src: "https://picsum.photos/900/900?random=802", alt: "Square frame 2" }
         ]}
       />
 
-      Closing paragraph: choose `aspect="wide"` (16:9) vs `aspect="square"` (1:1) deliberately so captions line up with your narrative and the figure does not feel cropped or floating.
+      Closing paragraph: by default the frame follows the media’s intrinsic ratio, so ultra-wide charts and square tiles both sit flush without letterboxing.
     </CollapsibleSection>
 
     <CollapsibleSection title="Very nested CollapsibleSection" level={4} defaultOpen={false}>

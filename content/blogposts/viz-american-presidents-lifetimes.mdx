@@ -1,0 +1,66 @@
+---
+kind: visualization
+title: "Visualization \"American Presidents — Lifetimes & Service\""
+subtitle: "Circular lifetime glyphs for U.S. presidents, after the Roman Emperors chart"
+excerpt: "An interactive recreation of the Roman Emperors circular lifetime chart applied to U.S. presidents: lifespan arcs, terms in office, and manner-of-death icons."
+date: "2026-09-10"
+year: 2026
+version: "draft"
+citationAuthor: "Yevtushenko, Vitaliy"
+tags:
+  - history
+  - timeline
+  - data visualization
+  - javascript
+  - presidents
+  - United States
+coverImage: "gallery/experiment-american-presidents-lifetimes/experiment-american-presidents-lifetimes.webp"
+repoUrl: "https://github.com/Witold1/rulers-lifetimes-and-reign-arcs"
+---
+
+<Carousel
+  caption="American Presidents — lifetimes and time in office as circular glyphs"
+  items={[
+    {
+      type: "image",
+      src: "gallery/experiment-american-presidents-lifetimes/experiment-american-presidents-lifetimes.webp",
+      alt: "Circular lifetime and service chart of American presidents"
+    }
+  ]}
+/>
+
+## Introduction
+
+An interactive recreation of the well-known *Roman Emperors* circular lifetime chart by [@dataisinteresting’s WRE-Emperors](https://github.com/dataisinteresting/WRE-Emperors), applied to U.S. presidents.
+
+Open the live chart: [American Presidents — Lifetimes & Service](https://witold1.github.io/rulers-lifetimes-and-reign-arcs/). Source: [GitHub](https://github.com/Witold1/rulers-lifetimes-and-reign-arcs).
+
+Related earlier work on this site: [Rulers of the Kazakh Khanate](/blog/viz-rulers-of-kazakh-khanate).
+
+## How to read a glyph
+
+Each president is one glyph:
+
+* **Thin white arc** — lifespan (full circle = 100 years), starting at birth (12 o’clock) and running clockwise
+* **Thick red arc** — time served in office (Cleveland and Trump show two segments for non-consecutive terms)
+* **Icon at the arc’s end** — manner of death, or a living marker for presidents still alive
+
+Sort, filter by manner of death, switch theme, and export SVG/PNG from the page chrome.
+
+## Data
+
+JSON under `data/` is the source of truth:
+
+* `meta.json` — “as of” date for living presidents’ open arcs
+* `presidents.json` — one object per unique president
+
+No bundler: serve `index.html` over HTTP so ES modules and `fetch` work. See the repo’s `CONTRIBUTING.md` for corrections.
+
+## License
+
+* **Code** (HTML, CSS, JS): MIT  
+* **Dataset** under `data/`: CC BY-SA 4.0
+
+<MediaPresence items={[]} />
+
+<CitationBox />

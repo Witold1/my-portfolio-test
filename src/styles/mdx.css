@@ -766,19 +766,16 @@ h2.mdx-media-header {
   border: none;
 }
 
-.mdx-carousel-wide {
-  aspect-ratio: 16 / 9;
-}
-
-.mdx-carousel-square {
-  aspect-ratio: 1 / 1;
-}
-
 .mdx-carousel-media {
   width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Optional fixed viewport when `aspect` is passed (e.g. "16 / 9"). */
+.mdx-carousel-frame--fixed .mdx-carousel-media {
   height: 100%;
   object-fit: contain;
-  display: block;
 }
 
 .mdx-carousel-clickable {

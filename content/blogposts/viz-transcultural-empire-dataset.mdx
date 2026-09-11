@@ -1,0 +1,65 @@
+---
+kind: visualization
+title: "Visualization \"Transcultural Empire\""
+subtitle: "From Russian Empire subjects to Soviet citizens — 1897 and 1926 censuses on a map"
+excerpt: "An interactive MapLibre explorer of Sablin et al. census GIS: province choropleths, composition panels, and full attribute tables for 1897 and 1926."
+date: "2026-09-01"
+year: 2026
+version: "draft"
+citationAuthor: "Yevtushenko, Vitaliy"
+tags:
+  - history
+  - census
+  - cartography
+  - data visualization
+  - maplibre
+  - geojson
+  - python
+coverImage: "gallery/experiment-transcultural-empire-dataset/experiment-transcultural-empire-dataset.webp"
+repoUrl: "https://github.com/Witold1/transcultural-empire-dataset"
+---
+
+<Carousel
+  caption="Transcultural Empire (Peoplespace) dataset explorer — map and table views over 1897 / 1926 census units"
+  items={[
+    {
+      type: "image",
+      src: "gallery/experiment-transcultural-empire-dataset/experiment-transcultural-empire-dataset.webp",
+      alt: "Preview of the Transcultural Empire dataset explorer interface"
+    }
+  ]}
+/>
+
+## Introduction
+
+From Russian Empire subjects to Soviet citizens, this project illustrates population change with the [1897](https://yulianovozhilova.ru/perepis1897-doc) and [1926](https://yulianovozhilova.ru/per1926) censuses via maps and tables.
+
+The Imperial census asked about social estate, native language, and religious affiliation. The Soviet census asked about self-declared nationality (_narodnost_) — and native language (not included in this extract). Backbone GIS comes from [Sablin et al., doi:10.11588/DATA/10064](https://doi.org/10.11588/data/10064).
+
+Open the live explorer: [Transcultural Empire Peoplespace](https://witold1.github.io/transcultural-empire-dataset/). Source: [GitHub](https://github.com/Witold1/transcultural-empire-dataset).
+
+## Views
+
+| View | Meaning |
+| --- | --- |
+| Map | Province choropleth, fixed VisQuill lens, composition panels, side panel |
+| Data table | Full DBF attributes (language / religion / estate / nationality); click a row to open that unit on the map |
+
+Shared **1897 · 1926** year toggle and **Modern · Historical** basemap toggle across both views. Historical defaults to [OpenHistoricalMap](https://www.openhistoricalmap.org/) dated to the selected census; Modern is OpenFreeMap Liberty.
+
+## Years
+
+| Year | Units | Population (manifest) | Choropleth examples |
+| --- | --- | --- | --- |
+| 1897 | 99 (89 with census) | ~126M | urban %, sex ratio, density, top language / religion share |
+| 1926 | 67 | ~149M | total / urban / rural, sex ratio, density, top nationality share |
+
+## Stack
+
+Vite + TypeScript explorer (MapLibre, VisQuill); Python prep (`pyshp`, `shapely`) rebuilds `data/processed/` GeoJSON, dictionaries, and tables from the Sablin shapefiles.
+
+Further census context: [Explanatory Notes (1926)](https://web.archive.org/web/20191013235801/http://www.demoscope.ru/weekly/2006/0267/arxiv04.php) and the [List and Dictionary of Nationalities (1927)](https://web.archive.org/web/20240619200541/https://www.demoscope.ru/weekly/knigi/slovar/slovar_1926.pdf) via Demoscope Weekly.
+
+<MediaPresence items={[]} />
+
+<CitationBox />
