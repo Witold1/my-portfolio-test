@@ -20,6 +20,18 @@ export {
 } from './filters';
 
 export {
+  GALLERY_UNDATED_YEAR_LABEL,
+  GALLERY_OTHER_SERIES_LABEL,
+  galleryItemYear,
+  galleryItemSeries,
+  formatGallerySeriesLabel,
+  groupGalleryItemsByYear,
+  groupGalleryItemsBySeries,
+  groupGalleryItems,
+  orderGalleryItemsForGrouping,
+} from './groupBy';
+
+export {
   resolveGalleryLightboxLayers,
   resolveGalleryShare,
   buildGalleryShareUrl,

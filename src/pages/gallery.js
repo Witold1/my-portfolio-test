@@ -1,14 +1,18 @@
 import { useState, useMemo, useEffect } from 'react';
 import Head from 'next/head';
 import GalleryGridLayoutToolbar from '../components/gallery/GalleryGridLayoutToolbar';
+import GalleryGroupToolbar from '../components/gallery/GalleryGroupToolbar';
 import GalleryGrid from '../components/gallery/GalleryGrid';
 import GalleryLightbox from '../components/gallery/GalleryLightbox';
+import ToolbarIcon from '../components/content/ToolbarIcon';
 import {
   getGalleryCategories,
   filterGalleryItems,
   filterVisibleGalleryItems,
   galleryNotesToMetaString,
   formatGalleryCategoryLabel,
+  groupGalleryItems,
+  orderGalleryItemsForGrouping,
   useGalleryLightbox,
 } from '../lib/gallery';
 import { useAdminPrefs } from '../components/admin/AdminPrefsProvider';
@@ -47,6 +51,7 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
   const loadError = galleryLoadError;
   const { showHiddenGallery } = useAdminPrefs();
   const [gridType, setGridType] = useState('uniform');
+  const [groupBy, setGroupBy] = useState('none');
   const [filter, setFilter] = useState('all');
   const [page, setPage] = useState(1);
   const itemsPerPage = 15;
@@ -63,16 +68,24 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
 
   useEffect(() => {
     setPage(1);
-  }, [filter]);
+  }, [filter, groupBy]);
 
   const categories = useMemo(
     () => getGalleryCategories(visibleItems, galleryCategories),
     [visibleItems, galleryCategories],
   );
   const filteredItems = useMemo(() => filterGalleryItems(visibleItems, filter), [visibleItems, filter]);
+  const displayItems = useMemo(
+    () => orderGalleryItemsForGrouping(filteredItems, groupBy),
+    [filteredItems, groupBy],
+  );
   const paginatedItems = useMemo(
-    () => filteredItems.slice(0, page * itemsPerPage),
-    [filteredItems, page],
+    () => displayItems.slice(0, page * itemsPerPage),
+    [displayItems, page],
+  );
+  const groupedSections = useMemo(
+    () => groupGalleryItems(paginatedItems, groupBy),
+    [groupBy, paginatedItems],
   );
 
   const modalDescription = modalItem ? galleryNotesToMetaString(modalItem.notes) : '';
@@ -112,12 +125,13 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
               <ContentBreadcrumb items={galleryBreadcrumbItems} />
             </div>
             <div className="content-index-body">
-              <div className="mb-6 gallery-controls flex flex-col gap-3 max-w-full">
+              <div className="gallery-toolbar">
                 <div
                   role="group"
                   aria-label="Filter by category"
                   className="gallery-cat-row"
                 >
+                  <ToolbarIcon name="filter" className="gallery-cat-row__icon" />
                   {categories.map((category) => {
                     const pressed = filter === category;
                     return (
@@ -134,11 +148,19 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
                     );
                   })}
                 </div>
-                <GalleryGridLayoutToolbar
-                  gridType={gridType}
-                  onUniform={() => setGridType('uniform')}
-                  onVariable={() => setGridType('variable')}
-                />
+                <div className="gallery-toolbar__controls">
+                  <GalleryGridLayoutToolbar
+                    gridType={gridType}
+                    onUniform={() => setGridType('uniform')}
+                    onVariable={() => setGridType('variable')}
+                  />
+                  <GalleryGroupToolbar
+                    groupBy={groupBy}
+                    onNone={() => setGroupBy('none')}
+                    onYear={() => setGroupBy('year')}
+                    onSeries={() => setGroupBy('series')}
+                  />
+                </div>
               </div>
               {loadError && (
                 <p className="text-red-600 dark:text-red-400" role="alert">
@@ -147,12 +169,36 @@ export default function Gallery({ galleryData, galleryCategories, galleryLoadErr
               )}
               {!loadError && paginatedItems.length > 0 ? (
                 <>
-                  <GalleryGrid
-                    items={paginatedItems}
-                    onCardClick={openModal}
-                    layout={gridType}
-                  />
-                  {paginatedItems.length < filteredItems.length && (
+                  {groupedSections ? (
+                    <div className="gallery-group-sections">
+                      {groupedSections.map((section) => (
+                        <section
+                          key={section.key}
+                          className="gallery-group-section"
+                          aria-labelledby={`gallery-group-${section.key}`}
+                        >
+                          <h2
+                            id={`gallery-group-${section.key}`}
+                            className="gallery-group-heading"
+                          >
+                            {section.label}
+                          </h2>
+                          <GalleryGrid
+                            items={section.items}
+                            onCardClick={openModal}
+                            layout={gridType}
+                          />
+                        </section>
+                      ))}
+                    </div>
+                  ) : (
+                    <GalleryGrid
+                      items={paginatedItems}
+                      onCardClick={openModal}
+                      layout={gridType}
+                    />
+                  )}
+                  {paginatedItems.length < displayItems.length && (
                     <button
                       type="button"
                       onClick={() => setPage(page + 1)}

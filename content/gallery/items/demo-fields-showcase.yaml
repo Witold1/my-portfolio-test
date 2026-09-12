@@ -2,6 +2,7 @@ title: Gallery YAML field showcase
 hidden: true
 subtitle: Every supported field in one tile (styleguide only)
 date: 2026-10-11
+series: demo
 categories: [visualizations, analytics, cartography, other]
 type: image
 src: https://picsum.photos/800/500?random=showcase

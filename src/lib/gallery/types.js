@@ -21,6 +21,7 @@
  * @property {GallerySlide[]} [slides] Present when `type === 'carousel'`
  * @property {string} [subtitle] Also accepted from YAML as `suptitle`
  * @property {string} [date] `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`
+ * @property {string} [series] Optional series slug (kebab-case); used for diversify + group-by-series
  * @property {string | string[]} [link] Site paths and/or external URLs (normalized); blog/project → toolbar, others → details
  * @property {string[]} [notes] Normalized paragraph list for lightbox Details
  * @property {true} [hidden] Soft-hide from public lists (admin can reveal)

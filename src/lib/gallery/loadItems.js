@@ -72,6 +72,22 @@ function normalizeDate(raw, fileLabel) {
   return date;
 }
 
+/** Optional series slug: lowercase kebab-case (`lidar`, `population-charts`). */
+function normalizeSeries(raw, fileLabel) {
+  if (raw == null || raw === '') return null;
+  if (typeof raw !== 'string') {
+    throw new Error(`${fileLabel}: "series" must be a string`);
+  }
+  const series = raw.trim().toLowerCase();
+  if (!series) return null;
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(series)) {
+    throw new Error(
+      `${fileLabel}: "series" must be lowercase kebab-case (e.g. lidar, population-charts), got "${raw}"`
+    );
+  }
+  return series;
+}
+
 function sortGalleryItems(items) {
   return [...items].sort((a, b) => {
     const byDate = String(b.date || '').localeCompare(String(a.date || ''));
@@ -136,6 +152,7 @@ function parseItemFile(filePath) {
         : undefined;
   const subtitle = subtitleRaw?.trim() || undefined;
   const date = normalizeDate(doc.date, fileLabel);
+  const series = normalizeSeries(doc.series, fileLabel);
   const notesParas = normalizeGalleryNotesParagraphs(doc.notes);
 
   const link = normalizeGalleryItemLink(doc.link);
@@ -156,6 +173,7 @@ function parseItemFile(filePath) {
   if (type === 'carousel') item.slides = slides;
   if (subtitle) item.subtitle = subtitle;
   if (date) item.date = date;
+  if (series) item.series = series;
   if (link) item.link = link;
   if (notesParas.length) item.notes = notesParas;
   if (doc.hidden === true) item.hidden = true;

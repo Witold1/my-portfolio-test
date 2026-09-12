@@ -1,6 +1,7 @@
 title: Test ultra-wide image
 hidden: true
 date: 2026-10-10
+series: demo
 src: https://picsum.photos/928/257?random=106
 categories: [cartography, analytics]
 notes: 

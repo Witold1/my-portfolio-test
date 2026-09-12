@@ -1,7 +1,8 @@
 title: Surnames of Central Europe
 suptitle: Germany, Poland, Czechia, Switzerland, Austria, Slovakia, Slovenia, Hungary
 date: 2024-06-15
-categories: [visualizations, cartography]
+series: surnames
+categories: [cartography]
 tags: [surnames, wordcloud, Central Europe]
 type: image
 src: blogposts/project-surnames/viz-surnames-central-europe/viz-surnames-central-europe--merged.webp

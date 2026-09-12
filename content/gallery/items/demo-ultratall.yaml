@@ -1,6 +1,7 @@
 title: Test ultra-tall image
 hidden: true
 date: 2026-10-10
+series: demo
 src: https://picsum.photos/337/907?random=105
 categories: [visualizations, analytics]
 notes: 

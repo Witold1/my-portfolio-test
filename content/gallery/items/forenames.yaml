@@ -1,7 +1,8 @@
 title: Forenames of the World
 subtitle: Regional forename wordcloud maps
 date: 2024-06-01
-categories: [visualizations, cartography]
+series: surnames
+categories: [cartography]
 tags: [forenames, wordcloud, demography]
 type: carousel
 src: blogposts/project-surnames/forenames/forenames--central-asia-merged.webp

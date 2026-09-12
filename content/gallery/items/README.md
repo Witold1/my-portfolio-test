@@ -12,7 +12,8 @@ Normalized field shapes (for editors / loaders): `lib/gallery/types.js`.
 
 ## Optional fields
 
-- `date` - publication date (`YYYY`, `YYYY-MM`, or `YYYY-MM-DD`); items sort **newest first**, then a series-diversity pass spreads items that share the same first slug segment (e.g. `lidar-*`, `viz-*`) so they do not clump. Undated items appear last. Not shown in the lightbox chrome yet.
+- `date` - publication date (`YYYY`, `YYYY-MM`, or `YYYY-MM-DD`); items sort **newest first**, then a series-diversity pass spreads items that share the same series so they do not clump. Undated items appear last. Not shown in the lightbox chrome yet.
+- `series` - optional kebab-case slug for related works (`lidar`, `population-charts`, `surnames`, …). Used for diversify + **Group → Series** on `/gallery`. Omit on one-offs.
 - `subtitle` - secondary line (lightbox caption / card hover); `suptitle` is accepted as an alias
 - `link` - site paths (`/blog/...`, `/projects/...`) and/or external source URLs; string or array. Relative forms like `blog/...` are normalized to `/blog/...`. Blog/project open from the toolbar; external URLs appear under **Show details** as sources
 - `notes` - string or list of strings; opened via **Show details** in the lightbox toolbar (omit for image-only items)
@@ -42,6 +43,7 @@ When root `type` is omitted on a single-item entry, it is inferred from `src` (e
 title: Korean Peninsula road network
 subtitle: OSM extract
 date: 2024-06-15
+series: road-network-chart
 type: image
 src: https://witold1.github.io/gallery/assets/content/Road-Networks/RoadNetwork-Korean-Peninsula-1.jpeg
 categories: [cartography, visualizations]
