@@ -10,11 +10,11 @@ export default function ContentLayout({ title, subtitle, metaLine, tags, childre
         <h1 className="content-title">{title}</h1>
         {subtitle ? <p className="content-subtitle">{subtitle}</p> : null}
         {metaLine ? (
-          <p
+          <div
             className={`content-meta-line${tagList.length ? ' content-meta-line--before-tags' : ' content-meta-line--before-body'}`}
           >
             {metaLine}
-          </p>
+          </div>
         ) : null}
         {tagList.length ? (
           <div className="content-tag-index mb-3" role="list" aria-label="Tags">

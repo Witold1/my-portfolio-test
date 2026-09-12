@@ -3,6 +3,7 @@ import path from 'path';
 import { parse as parseYaml } from 'yaml';
 import galleryConfig from '../../../content/config/gallery-settings.json';
 import { GALLERY_CONTENT_TYPE_SET } from './constants';
+import { diversifyGalleryBySeries } from './diversify';
 import { normalizeGalleryNotesParagraphs } from './filters';
 import { normalizeGalleryItemLink } from './links';
 import { getMediaBaseUrl, resolveMediaUrl } from '../mediaUrl';
@@ -180,7 +181,9 @@ export function loadGallery() {
     .readdirSync(GALLERY_ITEMS_DIR)
     .filter((name) => name.endsWith('.yaml') || name.endsWith('.yml'));
 
-  const items = sortGalleryItems(files.map((name) => parseItemFile(path.join(GALLERY_ITEMS_DIR, name))));
+  const items = diversifyGalleryBySeries(
+    sortGalleryItems(files.map((name) => parseItemFile(path.join(GALLERY_ITEMS_DIR, name)))),
+  );
 
   return {
     items,

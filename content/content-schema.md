@@ -9,7 +9,9 @@ Canonical field shapes also live as JSDoc in code:
 
 - `title`: string
 - `slug`: string (derived from file path for MDX; filename stem for gallery YAML)
-- `date`: YYYY-MM-DD (gallery also accepts YYYY / YYYY-MM)
+- `date`: YYYY-MM-DD (gallery also accepts YYYY / YYYY-MM) - shown as “Created during …”
+- `edited`: optional revisit date (YYYY / YYYY-MM / YYYY-MM-DD) - “Edited during …”
+- `polished`: softer alias of `edited` - “Polished during …” (used instead of `edited` when both are set)
 - `excerpt`: short summary
 - `tags`: string[]
 - `coverImage`: absolute or site-relative URL

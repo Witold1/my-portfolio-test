@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
+import ToolbarIcon from './content/ToolbarIcon';
 import {
   THEME_DEFAULT,
   THEME_PREFS,
@@ -10,68 +11,9 @@ import {
 const navLogoSrc = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/icons/nav-logo.svg`;
 
 const THEME_META = {
-  system: { label: 'System theme', nextHint: 'switch to dark' },
-  dark: { label: 'Dark theme', nextHint: 'switch to light' },
-  light: { label: 'Light theme', nextHint: 'switch to system' },
-};
-
-function IconSun({ className }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-    </svg>
-  );
-}
-
-function IconMoon({ className }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-    </svg>
-  );
-}
-
-function IconSystem({ className }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <rect x="3" y="4" width="18" height="12" rx="1.5" />
-      <path d="M8 20h8M12 16v4" />
-    </svg>
-  );
-}
-
-const THEME_ICONS = {
-  system: IconSystem,
-  dark: IconMoon,
-  light: IconSun,
+  system: { label: 'System theme', nextHint: 'switch to dark', icon: 'theme-system' },
+  dark: { label: 'Dark theme', nextHint: 'switch to light', icon: 'theme-moon' },
+  light: { label: 'Light theme', nextHint: 'switch to system', icon: 'theme-sun' },
 };
 
 function nextThemePref(current) {
@@ -98,7 +40,6 @@ export default function Navbar() {
   };
 
   const pref = themePref ?? THEME_DEFAULT;
-  const Icon = THEME_ICONS[pref];
   const meta = THEME_META[pref];
 
   return (
@@ -126,7 +67,7 @@ export default function Navbar() {
             title={meta.label}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm text-zinc-500 transition-colors hover:text-zinc-800 dark:text-zinc-500 dark:hover:text-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
           >
-            <Icon className="h-6 w-6" />
+            <ToolbarIcon name={meta.icon} size="1.5rem" />
           </button>
           {/* Hamburger Menu Button */}
           <button

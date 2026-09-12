@@ -62,7 +62,7 @@ export default function GalleryGridCardPreview({
     inferMediaTypeFromSrc(slides[0].src, slides[0].type) === 'video';
   const isVideoPreview = type === 'video' || carouselFirstIsVideo;
   const showsAsImage = type === 'image' || type === 'carousel' || isVideoPreview;
-  const { status, markReady, markError } = useGalleryMediaStatus(displaySrc);
+  const { status, markReady, markError, mediaRef } = useGalleryMediaStatus(displaySrc);
   const isLoading = status === 'loading';
   const isReady = status === 'ready';
   const isError = status === 'error';
@@ -121,6 +121,7 @@ export default function GalleryGridCardPreview({
           />
         ) : (
           <Image
+            ref={mediaRef}
             src={displaySrc}
             alt={imageAlt}
             fill={isUniform}

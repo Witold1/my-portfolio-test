@@ -7,6 +7,8 @@
  * @property {string} [title]
  * @property {string} [subtitle]
  * @property {string} [date] Prefer `YYYY-MM-DD`
+ * @property {string} [edited] Optional revisit date (`YYYY` / `YYYY-MM` / `YYYY-MM-DD`) → “Edited during …”
+ * @property {string} [polished] Softer alias of `edited` → “Polished during …” (wins if both set)
  * @property {string} [excerpt]
  * @property {string | string[]} [tags]
  * @property {string} [coverImage] Absolute or site-relative URL

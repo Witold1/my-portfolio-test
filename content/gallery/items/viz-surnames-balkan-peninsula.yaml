@@ -1,11 +1,8 @@
 title: Surnames of the Balkan Peninsula
-subtitle: Regional surname wordcloud maps
+suptitle: Albania, Bosnia and Herzegovina, Bulgaria, Croatia, Kosovo, Montenegro, North Macedonia, Romania, Serbia, Slovenia, Greece, Moldova
 date: 2024-06-15
 categories: [visualizations, cartography]
 tags: [surnames, wordcloud, Balkan Peninsula]
 type: image
 src: blogposts/project-surnames/viz-surnames-balkan-peninsula/viz-surnames-balkan-peninsula--merged.webp
 link: /projects/project-surnames-navigator-meta
-notes:
-  - Albania, Bosnia and Herzegovina, Bulgaria, Croatia, Kosovo, Montenegro, North Macedonia, Romania, Serbia, Slovenia, Greece, Moldova
-  - Data from Forebears.io

@@ -1,22 +1,57 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import GalleryMediaError from './GalleryMediaError';
 
+/**
+ * Track gallery media load state for skeletons / fade-in.
+ * Resets synchronously when `src` changes (avoids a useEffect race that can
+ * overwrite a cached `onLoad` and leave the cell stuck on the skeleton).
+ * `mediaRef` also catches already-complete cached img/video that never re-fire load.
+ */
 export function useGalleryMediaStatus(src) {
-  const [status, setStatus] = useState('loading');
+  const [state, setState] = useState({ src, status: 'loading' });
 
-  useEffect(() => {
-    setStatus('loading');
+  if (src !== state.src) {
+    setState({ src, status: 'loading' });
+  }
+
+  const status = src !== state.src ? 'loading' : state.status;
+
+  const markReady = useCallback(() => {
+    setState((prev) =>
+      prev.src === src && prev.status !== 'ready' ? { src, status: 'ready' } : prev,
+    );
   }, [src]);
+
+  const markError = useCallback(() => {
+    setState((prev) =>
+      prev.src === src && prev.status !== 'error' ? { src, status: 'error' } : prev,
+    );
+  }, [src]);
+
+  const mediaRef = useCallback(
+    (el) => {
+      if (!el) return;
+      if (el.tagName === 'VIDEO') {
+        if (el.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) markReady();
+        return;
+      }
+      if (el.tagName === 'IMG' && el.complete && el.naturalWidth > 0) {
+        markReady();
+      }
+    },
+    [markReady],
+  );
 
   return {
     status,
     isLoading: status === 'loading',
     isReady: status === 'ready',
     isError: status === 'error',
-    markReady: () => setStatus('ready'),
-    markError: () => setStatus('error'),
+    markReady,
+    markError,
+    mediaRef,
   };
 }
 

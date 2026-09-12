@@ -19,8 +19,14 @@ export async function getStaticProps({ params }) {
 
 export default function ProjectPost({ entry, tocItems, citePageMeta }) {
   const metaLine =
-    entry.date || entry.year || entry.version ? (
-      <ContentMetaLine date={entry.date} year={entry.year} version={entry.version} />
+    entry.date || entry.year || entry.edited || entry.polished || entry.version ? (
+      <ContentMetaLine
+        date={entry.date}
+        year={entry.year}
+        edited={entry.edited}
+        polished={entry.polished}
+        version={entry.version}
+      />
     ) : undefined;
 
   const afterShare = entry.repoUrl ? (

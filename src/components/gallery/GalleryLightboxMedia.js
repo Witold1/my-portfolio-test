@@ -21,7 +21,7 @@ export default function GalleryLightboxMedia({
 }) {
   const isVideo = inferMediaTypeFromSrc(src, type) === 'video';
   const poster = isVideo ? cdnPosterUrl(src) : '';
-  const { status, markReady, markError } = useGalleryMediaStatus(src);
+  const { status, markReady, markError, mediaRef } = useGalleryMediaStatus(src);
   const errorMessage = isVideo ? 'Could not load video' : 'Could not load image';
 
   return (
@@ -29,6 +29,7 @@ export default function GalleryLightboxMedia({
       {isVideo ? (
         <video
           key={src}
+          ref={mediaRef}
           src={src}
           poster={poster || undefined}
           controls
@@ -42,6 +43,7 @@ export default function GalleryLightboxMedia({
       ) : (
         <Image
           key={src}
+          ref={mediaRef}
           src={src}
           alt={alt}
           width={0}

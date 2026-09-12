@@ -66,11 +66,10 @@ function formatWithIntlCalendar(parts, calendarId) {
 }
 
 /**
- * Shared Blog / Projects date display - "Created during July 2026" when month is known,
- * otherwise "Created during 2026". Pass `calendar` from admin prefs for the Easter egg
- * (defaults to Gregorian).
+ * Shared Blog / Projects date period - "July 2026" when month is known, otherwise "2026".
+ * Pass `calendar` from admin prefs for the Easter egg (defaults to Gregorian).
  */
-export function formatContentDateLabel(
+export function formatContentPeriodLabel(
   fields = {},
   { calendar = DEFAULT_DATE_CALENDAR } = {},
 ) {
@@ -95,12 +94,45 @@ export function formatContentDateLabel(
     }
   }
 
-  return `Created during ${label}`;
+  return label;
 }
 
-/** Page meta line: date label plus optional project version. */
+/**
+ * Created line - "Created during July 2026" when month is known,
+ * otherwise "Created during 2026".
+ */
+export function formatContentDateLabel(fields = {}, options = {}) {
+  const period = formatContentPeriodLabel(fields, options);
+  return period ? `Created during ${period}` : '';
+}
+
+/**
+ * Optional revisit line from frontmatter `edited` or `polished` (ISO-like date).
+ * Prefer `polished` when both are set - softer label for long-gap cleanups.
+ */
+export function formatContentEditedLabel(fields = {}, options = {}) {
+  const polished =
+    typeof fields.polished === 'string' ? fields.polished.trim() : fields.polished;
+  const edited = typeof fields.edited === 'string' ? fields.edited.trim() : fields.edited;
+  const raw = polished || edited;
+  if (raw == null || raw === '') return '';
+
+  const period = formatContentPeriodLabel({ date: raw }, options);
+  if (!period) return '';
+  return polished ? `Polished during ${period}` : `Edited during ${period}`;
+}
+
+/** Page meta: created, optional edited/polished, optional project version (separate rows). */
+export function formatContentMetaParts(fields = {}, options = {}) {
+  const dateLabel = formatContentDateLabel(fields, options);
+  const editedLabel = formatContentEditedLabel(fields, options);
+  const raw = typeof fields.version === 'string' ? fields.version.trim() : '';
+  const versionLabel = raw ? `version ${raw}` : '';
+  return { dateLabel, editedLabel, versionLabel };
+}
+
+/** Flat meta string (tests / callers that want one line). Prefer `formatContentMetaParts` for UI. */
 export function formatContentMetaLine(fields = {}, options = {}) {
-  const segments = [formatContentDateLabel(fields, options)];
-  if (fields.version) segments.push(`v${fields.version}`);
-  return segments.filter(Boolean).join(', ');
+  const { dateLabel, editedLabel, versionLabel } = formatContentMetaParts(fields, options);
+  return [dateLabel, editedLabel, versionLabel].filter(Boolean).join(', ');
 }

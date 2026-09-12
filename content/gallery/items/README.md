@@ -12,7 +12,7 @@ Normalized field shapes (for editors / loaders): `lib/gallery/types.js`.
 
 ## Optional fields
 
-- `date` - publication date (`YYYY`, `YYYY-MM`, or `YYYY-MM-DD`); items sort **newest first** (same as blog). Undated items appear last. Not shown in the lightbox chrome yet.
+- `date` - publication date (`YYYY`, `YYYY-MM`, or `YYYY-MM-DD`); items sort **newest first**, then a series-diversity pass spreads items that share the same first slug segment (e.g. `lidar-*`, `viz-*`) so they do not clump. Undated items appear last. Not shown in the lightbox chrome yet.
 - `subtitle` - secondary line (lightbox caption / card hover); `suptitle` is accepted as an alias
 - `link` - site paths (`/blog/...`, `/projects/...`) and/or external source URLs; string or array. Relative forms like `blog/...` are normalized to `/blog/...`. Blog/project open from the toolbar; external URLs appear under **Show details** as sources
 - `notes` - string or list of strings; opened via **Show details** in the lightbox toolbar (omit for image-only items)

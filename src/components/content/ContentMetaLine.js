@@ -1,12 +1,22 @@
 'use client';
 
 import { useAdminPrefs } from '../admin/AdminPrefsProvider';
-import { formatContentMetaLine } from '../../lib/content/contentDate';
+import { formatContentMetaParts } from '../../lib/content/contentDate';
 
-/** Date / year / optional version line that reacts to the admin calendar Easter egg. */
-export default function ContentMetaLine({ date, year, version }) {
+/** Created / optional edited|polished / optional version - reacts to admin calendar Easter egg. */
+export default function ContentMetaLine({ date, year, edited, polished, version }) {
   const { dateCalendar } = useAdminPrefs();
-  const line = formatContentMetaLine({ date, year, version }, { calendar: dateCalendar });
-  if (!line) return null;
-  return <>{line}</>;
+  const { dateLabel, editedLabel, versionLabel } = formatContentMetaParts(
+    { date, year, edited, polished, version },
+    { calendar: dateCalendar }
+  );
+  if (!dateLabel && !editedLabel && !versionLabel) return null;
+
+  return (
+    <>
+      {dateLabel ? <span className="content-meta-line__date">{dateLabel}</span> : null}
+      {editedLabel ? <span className="content-meta-line__edited">{editedLabel}</span> : null}
+      {versionLabel ? <span className="content-meta-line__version">{versionLabel}</span> : null}
+    </>
+  );
 }

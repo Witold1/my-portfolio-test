@@ -1,9 +1,9 @@
 ---
 kind: visualization
-title: "Visualization \"American Presidents — Lifetimes & Service\""
+title: "Visualization \"American Presidents - Lifetimes & Service\""
 subtitle: "Circular lifetime glyphs for U.S. presidents, after the Roman Emperors chart"
 excerpt: "An interactive recreation of the Roman Emperors circular lifetime chart applied to U.S. presidents: lifespan arcs, terms in office, and manner-of-death icons."
-date: "2026-09-10"
+date: "2026-07-01"
 year: 2026
 version: "draft"
 citationAuthor: "Yevtushenko, Vitaliy"
@@ -19,7 +19,7 @@ repoUrl: "https://github.com/Witold1/rulers-lifetimes-and-reign-arcs"
 ---
 
 <Carousel
-  caption="American Presidents — lifetimes and time in office as circular glyphs"
+  caption="American Presidents - lifetimes and time in office as circular glyphs"
   items={[
     {
       type: "image",
@@ -29,21 +29,23 @@ repoUrl: "https://github.com/Witold1/rulers-lifetimes-and-reign-arcs"
   ]}
 />
 
-## Introduction
+## What is this about?
 
 An interactive recreation of the well-known *Roman Emperors* circular lifetime chart by [@dataisinteresting’s WRE-Emperors](https://github.com/dataisinteresting/WRE-Emperors), applied to U.S. presidents.
 
-Open the live chart: [American Presidents — Lifetimes & Service](https://witold1.github.io/rulers-lifetimes-and-reign-arcs/). Source: [GitHub](https://github.com/Witold1/rulers-lifetimes-and-reign-arcs).
-
 Related earlier work on this site: [Rulers of the Kazakh Khanate](/blog/viz-rulers-of-kazakh-khanate).
+
+## Try it yourself
+
+Open the live chart: [LINK - "American Presidents - Lifetimes & Service"](https://witold1.github.io/rulers-lifetimes-and-reign-arcs/). Source on [GitHub](https://github.com/Witold1/rulers-lifetimes-and-reign-arcs).
 
 ## How to read a glyph
 
 Each president is one glyph:
 
-* **Thin white arc** — lifespan (full circle = 100 years), starting at birth (12 o’clock) and running clockwise
-* **Thick red arc** — time served in office (Cleveland and Trump show two segments for non-consecutive terms)
-* **Icon at the arc’s end** — manner of death, or a living marker for presidents still alive
+* **Thin white arc** - lifespan (full circle = 100 years), starting at birth (12 o’clock) and running clockwise
+* **Thick red arc** - time served in office (Cleveland and Trump show two segments for non-consecutive terms)
+* **Icon at the arc’s end** - manner of death, or a living marker for presidents still alive
 
 Sort, filter by manner of death, switch theme, and export SVG/PNG from the page chrome.
 
@@ -51,8 +53,8 @@ Sort, filter by manner of death, switch theme, and export SVG/PNG from the page 
 
 JSON under `data/` is the source of truth:
 
-* `meta.json` — “as of” date for living presidents’ open arcs
-* `presidents.json` — one object per unique president
+* `meta.json` - “as of” date for living presidents’ open arcs
+* `presidents.json` - one object per unique president
 
 No bundler: serve `index.html` over HTTP so ES modules and `fetch` work. See the repo’s `CONTRIBUTING.md` for corrections.
 

@@ -19,8 +19,13 @@ export async function getStaticProps({ params }) {
 
 export default function BlogPost({ entry, tocItems, citePageMeta }) {
   const metaLine =
-    entry.date || entry.year ? (
-      <ContentMetaLine date={entry.date} year={entry.year} />
+    entry.date || entry.year || entry.edited || entry.polished ? (
+      <ContentMetaLine
+        date={entry.date}
+        year={entry.year}
+        edited={entry.edited}
+        polished={entry.polished}
+      />
     ) : undefined;
 
   return (

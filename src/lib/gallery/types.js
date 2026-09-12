@@ -26,7 +26,7 @@
  * @property {true} [hidden] Soft-hide from public lists (admin can reveal)
  *
  * @typedef {Object} GalleryLoadResult
- * @property {GalleryItem[]} items Sorted newest-first (undated last)
+ * @property {GalleryItem[]} items Newest-first, then series-diversified (undated last)
  * @property {string[]} categories Allowed category ids from config
  * @property {string} mediaBaseUrl Resolved media base (may be empty)
  */

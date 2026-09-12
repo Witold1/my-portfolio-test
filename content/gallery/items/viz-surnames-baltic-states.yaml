@@ -1,11 +1,8 @@
 title: Surnames of the Baltic States
-subtitle: Regional surname wordcloud maps
+suptitle: Estonia, Latvia, Lithuania
 date: 2024-06-15
 categories: [visualizations, cartography]
 tags: [surnames, wordcloud, Baltic States]
 type: image
 src: blogposts/project-surnames/viz-surnames-baltic-states/viz-surnames-baltic-states--merged.webp
 link: /projects/project-surnames-navigator-meta
-notes:
-  - Estonia, Latvia, Lithuania
-  - Data from Forebears.io
